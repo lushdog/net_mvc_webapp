@@ -44,6 +44,8 @@
     </PublishDatabaseSettings>
     <DeployIisAppPath>Default Web Site/K2BJJApp</DeployIisAppPath>
     <DesktopBuildPackageLocation>obj\Debug\Package\K2BJJApp.zip</DesktopBuildPackageLocation>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -199,7 +201,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50712</DevelopmentServerPort>
+          <DevelopmentServerPort>59913</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

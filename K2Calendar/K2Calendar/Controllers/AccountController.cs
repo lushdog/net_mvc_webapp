@@ -84,13 +84,12 @@ namespace K2Calendar.Controllers
                 
                 // Add user details to User model
                 AppDbContext context = new AppDbContext();
-
                 UserInfoModel user = model;
                 user.UserId = new Guid(newUser.ProviderUserKey.ToString());
-                user.MembershipUser = newUser;
+                user.SignUpDate = DateTime.Now.ToUniversalTime();
                 context.Users.Add(user);
                 context.SaveChanges();
-
+                
                 if (createStatus == MembershipCreateStatus.Success)
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);

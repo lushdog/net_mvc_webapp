@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -44,12 +45,18 @@ namespace K2Calendar.Models
 
     public class UserInfoModel
     {       
+        /// <summary>
+        /// <para>Corresponds to ProviderUserKey in ASP Membership</para>
+        /// <para>Used in Membership.GetUser(ProviderUserKey) to retrieve email and username.</para>
+        /// </summary>
         [Key]
         [Required]
+        [Editable(false, AllowInitialValue=true)]
         [DataType(DataType.Text)]
         public Guid UserId { get; set; }
 
         [Required]
+        [NotMapped]
         [Display(Name = "User name")]
         public string UserName { get; set; }
 
@@ -93,6 +100,7 @@ namespace K2Calendar.Models
         public string PhoneNumber { get; set; }
 
         [Required]
+        [NotMapped]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -115,12 +123,52 @@ namespace K2Calendar.Models
         [Display(Name = "Rank")]
         public string AvatarImage { get; set; }
 
-        //TODO: relations ids replaced by class when created
-        public int RankID { get; set; }
+        [Required]
+        public UserRankModel Rank { get; set; }
 
-        public MembershipUser MembershipUser { get; set; }
+    }
+    
+    [NotMapped]
+    public class RegisterModel : UserInfoModel
+    {
+        [Required]
+        [NotMapped]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [NotMapped]
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
     }
 
+    public class UserRankModel
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Required]
+        [Display(Name = "Rank id")]
+        public int RankId { get; set; }
+
+        [Required]
+        [Display(Name="Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name="Image")]
+        public string Image { get; set; }
+
+        [Required]
+        [Display(Name="Rank level")]
+        public int Level { get; set; }
+    }
+
+
+    
+    
     /*
     public class RegisterModel
     {
@@ -145,18 +193,4 @@ namespace K2Calendar.Models
         public string ConfirmPassword { get; set; }
     }
     */
-
-    public class RegisterModel : UserInfoModel
-    {
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
-    }
 }

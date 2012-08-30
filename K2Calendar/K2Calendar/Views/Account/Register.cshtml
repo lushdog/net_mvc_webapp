@@ -1,61 +1,118 @@
 ﻿@model K2Calendar.Models.RegisterModel
-
 @{
     ViewBag.Title = "Register";
 }
-
-<h2>Create a New Account</h2>
-<p>
-    Use the form below to create a new account. 
-</p>
-<p>
-    Passwords are required to be a minimum of @Membership.MinRequiredPasswordLength characters in length.
-</p>
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")
-    <div>
-        <fieldset>
-            <legend>Account Information</legend>
-
-            <div class="editor-label">
+<div class="container">
+    <h2>
+        Create a New Account</h2>
+    <p>
+        Use the form below to create a new account.
+    </p>
+    <p>
+        Passwords are required to be a minimum of @Membership.MinRequiredPasswordLength
+        characters in length.
+    </p>
+    <p>
+        @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")
+    </p>
+    <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+    @using (Html.BeginForm())
+    {
+        <div class="row-fluid">
+            <div class="span6">
                 @Html.LabelFor(m => m.UserName)
-            </div>
-            <div class="editor-field">
-                @Html.TextBoxFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName, new { tabindex = "1" })
                 @Html.ValidationMessageFor(m => m.UserName)
             </div>
-
-            <div class="editor-label">
-                @Html.LabelFor(m => m.Email)
+            <div class="span6">
+                @Html.LabelFor(m => m.Address2)
+                @Html.TextBoxFor(m => m.Address2, new { tabindex = "8" })
+                @Html.ValidationMessageFor(m => m.Address2)
             </div>
-            <div class="editor-field">
-                @Html.TextBoxFor(m => m.Email)
+        </div>
+        
+        <div class="row-fluid">
+            <div class="span6">
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { tabindex = "2" })
                 @Html.ValidationMessageFor(m => m.Email)
             </div>
-
-            <div class="editor-label">
-                @Html.LabelFor(m => m.Password)
+            <div class="span6">
+                @Html.LabelFor(m => m.State)
+                @Html.TextBoxFor(m => m.State, new { tabindex = "9" })
+                @Html.ValidationMessageFor(m => m.State)
             </div>
-            <div class="editor-field">
-                @Html.PasswordFor(m => m.Password)
+        </div>
+       
+        <div class="row-fluid">
+            <div class="span6">
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { tabindex = "3" })
                 @Html.ValidationMessageFor(m => m.Password)
             </div>
-
-            <div class="editor-label">
-                @Html.LabelFor(m => m.ConfirmPassword)
+            <div class="span6">
+                @Html.LabelFor(m => m.ZipCode)
+                @Html.TextBoxFor(m => m.ZipCode, new { tabindex = "10" })
+                @Html.ValidationMessageFor(m => m.ZipCode)
             </div>
-            <div class="editor-field">
-                @Html.PasswordFor(m => m.ConfirmPassword)
+        </div>
+        
+        <div class="row-fluid">
+            <div class="span6">
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword, new { tabindex = "4" })
                 @Html.ValidationMessageFor(m => m.ConfirmPassword)
             </div>
-
-            <p>
-                <input type="submit" value="Register" />
-            </p>
-        </fieldset>
-    </div>
-}
+            <div class="span6">
+                @Html.LabelFor(m => m.Country)
+                @Html.TextBoxFor(m => m.Country, new { tabindex = "11" })
+                @Html.ValidationMessageFor(m => m.Country)
+            </div>
+        </div>
+        
+        <div class="row-fluid">
+            <div class="span6">
+                @Html.LabelFor(m => m.FirstName)
+                @Html.TextBoxFor(m => m.FirstName, new { tabindex = "5" })
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
+            <div class="span6">
+                @Html.LabelFor(m => m.BirthDate)
+                @Html.TextBoxFor(m => m.BirthDate, new { tabindex = "12" })
+                @Html.ValidationMessageFor(m => m.BirthDate)
+            </div>
+        </div>
+        
+        <div class="row-fluid">
+            <div class="span6">
+                @Html.LabelFor(m => m.LastName)
+                @Html.TextBoxFor(m => m.LastName, new { tabindex = "6" })
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
+            <div class="span6">
+                @Html.LabelFor(m => m.AvatarImage)
+                @Html.TextBoxFor(m => m.AvatarImage, new { tabindex = "13" })
+                @Html.ValidationMessageFor(m => m.AvatarImage)
+            </div>
+        </div>
+        
+          
+        <div class="row-fluid">
+            <div class="span6">
+                @Html.LabelFor(m => m.Address1)
+                @Html.TextBoxFor(m => m.Address1, new { tabindex = "7" })
+                @Html.ValidationMessageFor(m => m.Address1)
+            </div>
+            <div class="span6">
+                @Html.LabelFor(m => m.EnrollmentDate)
+                @Html.TextBoxFor(m => m.EnrollmentDate, new { tabindex = "14" })
+                @Html.ValidationMessageFor(m => m.EnrollmentDate)
+            </div>
+        </div>
+        <br />
+        <p>
+            <button type="submit" class="btn btn-primary btn-large" tabindex = "15">Register &raquo;</button>
+        </p>
+    }
+</div>
