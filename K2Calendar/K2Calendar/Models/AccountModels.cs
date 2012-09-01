@@ -44,21 +44,16 @@ namespace K2Calendar.Models
     }
 
     public class UserInfoModel
-    {       
+    {
+        [Key]
+        [Required]
+        public int Id { get; set; }
+        
         /// <summary>
         /// <para>Corresponds to ProviderUserKey in ASP Membership</para>
         /// <para>Used in Membership.GetUser(ProviderUserKey) to retrieve email and username.</para>
         /// </summary>
-        [Key]
-        [Required]
-        [Editable(false, AllowInitialValue=true)]
-        [DataType(DataType.Text)]
-        public Guid UserId { get; set; }
-
-        [Required]
-        [NotMapped]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+        public Guid MembershipId { get; set; }
 
         [Required]
         [DataType(DataType.Text)]
@@ -96,53 +91,68 @@ namespace K2Calendar.Models
 
         [Required]
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = "Country")]
+        [Display(Name = "Phone number")]
         public string PhoneNumber { get; set; }
-
-        [Required]
-        [NotMapped]
-        [DataType(DataType.EmailAddress)]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Sign up date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = @"{0:MM/dd\/yyyy}")]
         public DateTime SignUpDate { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
         [Display(Name = "Birthday")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = @"{0:MM\/dd\/yyyy}")]
         public DateTime BirthDate { get; set; }
 
         [DataType(DataType.Date)]
         [Display(Name = "Enrollment date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = @"{0:MM\/dd\/yyyy}")]
         public DateTime EnrollmentDate { get; set; }
        
         [DataType(DataType.ImageUrl)]
-        [Display(Name = "Rank")]
+        [Display(Name = "Avatar")]
         public string AvatarImage { get; set; }
+        
+        [Display(Name = "Rank")]
+        public int RankId { get; set; }
 
-        [Required]
+        [ForeignKey("RankId")]
         public UserRankModel Rank { get; set; }
+
+        [Display(Name = "IsActive")]
+        public bool IsActive { get; set; }
 
     }
     
-    [NotMapped]
-    public class RegisterModel : UserInfoModel
+    public class RegisterModel
     {
         [Required]
-        [NotMapped]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
-        [NotMapped]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+    }
+
+    public class UserInfoAndRegisterModel
+    {
+        public UserInfoModel UserInfoModel { get; set; }
+        public RegisterModel RegisterModel { get; set; }
     }
 
     public class UserRankModel
@@ -150,8 +160,7 @@ namespace K2Calendar.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
-        [Display(Name = "Rank id")]
-        public int RankId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Display(Name="Name")]

@@ -12,6 +12,8 @@ namespace K2Calendar.Controllers
     public class AccountController : Controller
     {
 
+        AppDbContext dbContext = new AppDbContext();
+
         //
         // GET: /Account/LogOn
 
@@ -38,7 +40,7 @@ namespace K2Calendar.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Register", "Account");
+                       return RedirectToAction("Register", "Account");
                     }
                 }
                 else
@@ -66,6 +68,7 @@ namespace K2Calendar.Controllers
 
         public ActionResult Register()
         {
+            GenerateRanksList();
             return View();
         }
 
@@ -74,25 +77,34 @@ namespace K2Calendar.Controllers
 
         [HttpPost]
         [Authorize]
-        public ActionResult Register(RegisterModel model)
+        public ActionResult Register(UserInfoAndRegisterModel model)
         {
             if (ModelState.IsValid)
             {
+                RegisterModel registerModel = model.RegisterModel;
+                UserInfoModel userInfoModel = model.UserInfoModel;
+                
                 // Attempt to register the user in membership provider
                 MembershipCreateStatus createStatus;
-                MembershipUser newUser = Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, null, out createStatus);
-                
-                // Add user details to User model
-                AppDbContext context = new AppDbContext();
-                UserInfoModel user = model;
-                user.UserId = new Guid(newUser.ProviderUserKey.ToString());
-                user.SignUpDate = DateTime.Now.ToUniversalTime();
-                context.Users.Add(user);
-                context.SaveChanges();
+                MembershipUser newUser = Membership.CreateUser(registerModel.UserName, registerModel.Password, registerModel.Email, null, null, true, null, out createStatus);
                 
                 if (createStatus == MembershipCreateStatus.Success)
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
+                    try
+                    {
+                        userInfoModel.MembershipId = new Guid(newUser.ProviderUserKey.ToString());
+                        userInfoModel.SignUpDate = DateTime.Now.ToUniversalTime();
+                        userInfoModel.IsActive = true;
+                        dbContext.Users.Add(userInfoModel);
+                        dbContext.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        Membership.DeleteUser(registerModel.UserName);
+                        throw new InvalidOperationException("Could not create UserInfoModel.", ex);
+                    }
+
+                    FormsAuthentication.SetAuthCookie(registerModel.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -102,9 +114,52 @@ namespace K2Calendar.Controllers
             }
 
             // If we got this far, something failed, redisplay form
+            GenerateRanksList();
             return View(model);
         }
 
+        //
+        // GET: /Account/Edit
+       
+        public ActionResult Edit(int id)
+        {
+            UserInfoModel userInfoModel = dbContext.Users.Find(id);
+
+            if (userInfoModel == null)
+                throw new InvalidOperationException("Could not find UserInfo for provided Id.");
+
+            MembershipUser membershipUser = Membership.GetUser(userInfoModel.MembershipId);
+
+            if (userInfoModel == null)
+                throw new InvalidOperationException("Could not find MembershipUser for provided MembershipId.");
+
+            RegisterModel registerModel = new RegisterModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
+            UserInfoAndRegisterModel model = new UserInfoAndRegisterModel { UserInfoModel = userInfoModel, RegisterModel = registerModel };
+            GenerateRanksList();
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Edit(UserInfoAndRegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    dbContext.Entry(model.UserInfoModel).State = System.Data.EntityState.Modified;
+                    dbContext.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Failed to update UserInfoModel", ex.InnerException);
+                }
+            }
+            GenerateRanksList();
+            return View(model);
+        }
+       
         //
         // GET: /Account/ChangePassword
 
@@ -158,6 +213,17 @@ namespace K2Calendar.Controllers
         {
             return View();
         }
+
+
+
+        private void GenerateRanksList(object selectedRankId = null)
+        {
+            var ranksQuery = from ranks in dbContext.Ranks
+                             orderby ranks.Level ascending
+                             select ranks;
+            ViewBag.RankList = new SelectList(ranksQuery, "Id", "Name", selectedRankId);
+        }
+
 
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
