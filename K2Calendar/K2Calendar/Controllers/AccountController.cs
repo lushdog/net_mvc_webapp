@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
 using K2Calendar.Models;
-using System.Data.Services.Client;
-using System.Data.Objects;
 
 namespace K2Calendar.Controllers
 {
     public class AccountController : Controller
     {
-
         AppDbContext dbContext = new AppDbContext();
 
         // GET: /Account/LogOn
