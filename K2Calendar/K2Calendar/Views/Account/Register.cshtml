@@ -1,4 +1,4 @@
-﻿@model K2Calendar.Models.UserInfoAndRegisterModel
+﻿@model K2Calendar.Models.CreateUserModel
 @{
     ViewBag.Title = "Register";
 }
@@ -21,9 +21,9 @@
     {
         <div class="row-fluid">
             <div class="span6">
-                @Html.LabelFor(m => m.RegisterModel.UserName)
-                @Html.TextBoxFor(m => m.RegisterModel.UserName, new { tabindex = "1" })
-                @Html.ValidationMessageFor(m => m.RegisterModel.UserName)
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName, new { tabindex = "1" })
+                @Html.ValidationMessageFor(m => m.UserName)
             </div>
             <div class="span6">
                 @Html.LabelFor(m => m.UserInfoModel.PhoneNumber)
@@ -34,9 +34,9 @@
         
         <div class="row-fluid">
             <div class="span6">
-                @Html.LabelFor(m => m.RegisterModel.Email)
-                @Html.TextBoxFor(m => m.RegisterModel.Email, new { tabindex = "2" })
-                @Html.ValidationMessageFor(m => m.RegisterModel.Email)
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { tabindex = "2" })
+                @Html.ValidationMessageFor(m => m.Email)
             </div>
             <div class="span6">
                 @Html.LabelFor(m => m.UserInfoModel.State)
@@ -47,9 +47,9 @@
        
         <div class="row-fluid">
             <div class="span6">
-                @Html.LabelFor(m => m.RegisterModel.Password)
-                @Html.PasswordFor(m => m.RegisterModel.Password, new { tabindex = "3" })
-                @Html.ValidationMessageFor(m => m.RegisterModel.Password)
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { tabindex = "3" })
+                @Html.ValidationMessageFor(m => m.Password)
             </div>
             <div class="span6">
                 @Html.LabelFor(m => m.UserInfoModel.ZipCode)
@@ -60,9 +60,9 @@
         
         <div class="row-fluid">
             <div class="span6">
-                @Html.LabelFor(m => m.RegisterModel.ConfirmPassword)
-                @Html.PasswordFor(m => m.RegisterModel.ConfirmPassword, new { tabindex = "4" })
-                @Html.ValidationMessageFor(m => m.RegisterModel.ConfirmPassword)
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword, new { tabindex = "4" })
+                @Html.ValidationMessageFor(m => m.ConfirmPassword)
             </div>
             <div class="span6">
                 @Html.LabelFor(m => m.UserInfoModel.Country)

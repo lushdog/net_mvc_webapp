@@ -16,7 +16,6 @@ namespace K2Calendar.Controllers
 
         AppDbContext dbContext = new AppDbContext();
 
-        //
         // GET: /Account/LogOn
 
         public ActionResult LogOn()
@@ -24,7 +23,6 @@ namespace K2Calendar.Controllers
             return View();
         }
 
-        //
         // POST: /Account/LogOn
 
         [HttpPost]
@@ -65,7 +63,7 @@ namespace K2Calendar.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
+        
         // GET: /Account/Register
 
         public ActionResult Register()
@@ -73,21 +71,19 @@ namespace K2Calendar.Controllers
             return View();
         }
 
-        //
         // POST: /Account/Register
 
         [HttpPost]
         [Authorize]
-        public ActionResult Register(UserInfoAndRegisterModel model)
+        public ActionResult Register(CreateUserModel model)
         {
             if (ModelState.IsValid)
             {
-                CreateMembershipModel registerModel = model.RegisterModel;
                 UserInfoModel userInfoModel = model.UserInfoModel;
                 
                 // Attempt to register the user in membership provider
                 MembershipCreateStatus createStatus;
-                MembershipUser newUser = Membership.CreateUser(registerModel.UserName, registerModel.Password, registerModel.Email, null, null, true, null, out createStatus);
+                MembershipUser newUser = Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, null, out createStatus);
               
                 if (createStatus == MembershipCreateStatus.Success)
                 {
@@ -99,15 +95,15 @@ namespace K2Calendar.Controllers
                         userInfoModel.RankId = dbContext.Ranks.Min(r => r.Level);
                         dbContext.Users.Add(userInfoModel);
                         dbContext.SaveChanges();
-                        Roles.AddUserToRole(registerModel.UserName, "User");
+                        Roles.AddUserToRole(model.UserName, "User");
                     }
                     catch (Exception ex)
                     {
-                        Membership.DeleteUser(registerModel.UserName);
+                        Membership.DeleteUser(model.UserName);
                         throw new InvalidOperationException("Could not create UserInfoModel.", ex);
                     }
 
-                    FormsAuthentication.SetAuthCookie(registerModel.UserName, false /* createPersistentCookie */);
+                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -120,6 +116,7 @@ namespace K2Calendar.Controllers
             return View(model);
         }
 
+        
         //
         // GET: /Account/Edit
        
@@ -174,7 +171,7 @@ namespace K2Calendar.Controllers
             return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
         }
        
-        //
+        
         // GET: /Account/ChangePassword
 
         [Authorize]
@@ -183,7 +180,6 @@ namespace K2Calendar.Controllers
             return View();
         }
 
-        //
         // POST: /Account/ChangePassword
 
         [Authorize]
@@ -219,14 +215,14 @@ namespace K2Calendar.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-
-        //
+                
         // GET: /Account/ChangePasswordSuccess
 
         public ActionResult ChangePasswordSuccess()
         {
             return View();
         }
+
 
 
 

@@ -126,7 +126,7 @@ namespace K2Calendar.Models
 
     }
     
-    public class CreateMembershipModel
+    public class CreateUserModel
     {
         [Required]
         [Display(Name = "User name")]
@@ -147,6 +147,8 @@ namespace K2Calendar.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public UserInfoModel UserInfoModel { get; set; }
     }
 
     public class UserEditInfoModel
@@ -162,12 +164,6 @@ namespace K2Calendar.Models
         public UserInfoModel UserInfoModel { get; set; }
     }
     
-    public class UserInfoAndRegisterModel
-    {
-        public UserInfoModel UserInfoModel { get; set; }
-        public CreateMembershipModel RegisterModel { get; set; }
-    }
-
     public class UserRankModel
     {
         [Key]
