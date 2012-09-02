@@ -1,4 +1,4 @@
-﻿@model K2Calendar.Models.UserInfoAndRegisterModel
+﻿@model K2Calendar.Models.UserEditInfoModel
 @{
     ViewBag.Title = "Update User";
 }
@@ -20,9 +20,9 @@
         @Html.HiddenFor(m => m.UserInfoModel.SignUpDate) 
         <div class="row-fluid">
             <div class="span6">
-                @Html.LabelFor(m => m.RegisterModel.UserName)
-                @Html.TextBoxFor(m => m.RegisterModel.UserName, new { tabindex = "1" , disabled = "disabled" } )
-                @Html.ValidationMessageFor(m => m.RegisterModel.UserName)
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName, new { tabindex = "1" , disabled = "disabled" } )
+                @Html.ValidationMessageFor(m => m.UserName)
             </div>
             <div class="span6">
                 @Html.LabelFor(m => m.UserInfoModel.State)
@@ -33,9 +33,9 @@
         
         <div class="row-fluid">
             <div class="span6">
-                @Html.LabelFor(m => m.RegisterModel.Email)
-                @Html.TextBoxFor(m => m.RegisterModel.Email, new { tabindex = "2" , disabled = "disabled" })
-                @Html.ValidationMessageFor(m => m.RegisterModel.Email)
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { tabindex = "2" , disabled = "disabled" })
+                @Html.ValidationMessageFor(m => m.Email)
             </div>
             <div class="span6">
                 @Html.LabelFor(m => m.UserInfoModel.ZipCode)
@@ -90,8 +90,6 @@
                 @Html.ValidationMessageFor(m => m.UserInfoModel.Address2)
             </div>
             <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.RankId)
-                @Html.DropDownListFor(m => m.UserInfoModel.RankId, (SelectList)ViewBag.RankList, new { tabindex = "13" })
             </div>
         </div>
         
@@ -102,8 +100,7 @@
                 @Html.ValidationMessageFor(m => m.UserInfoModel.PhoneNumber)
             </div>
             <div class="span6">
-               
-            </div>
+             </div>
         </div>
         
         <br />

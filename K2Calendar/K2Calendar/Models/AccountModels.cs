@@ -126,7 +126,7 @@ namespace K2Calendar.Models
 
     }
     
-    public class RegisterModel
+    public class CreateMembershipModel
     {
         [Required]
         [Display(Name = "User name")]
@@ -149,10 +149,23 @@ namespace K2Calendar.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class UserEditInfoModel
+    {
+        [Editable(false)]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
+
+        [Editable(false)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        public UserInfoModel UserInfoModel { get; set; }
+    }
+    
     public class UserInfoAndRegisterModel
     {
         public UserInfoModel UserInfoModel { get; set; }
-        public RegisterModel RegisterModel { get; set; }
+        public CreateMembershipModel RegisterModel { get; set; }
     }
 
     public class UserRankModel
@@ -174,8 +187,6 @@ namespace K2Calendar.Models
         [Display(Name="Rank level")]
         public int Level { get; set; }
     }
-
-
     
     
     /*

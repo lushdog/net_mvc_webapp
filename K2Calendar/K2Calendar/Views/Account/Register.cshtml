@@ -104,8 +104,6 @@
                 @Html.ValidationMessageFor(m => m.UserInfoModel.Address1)
             </div>
             <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.RankId)
-                @Html.DropDownListFor(m => m.UserInfoModel.RankId, (SelectList)ViewBag.RankList, new { tabindex = "15" })
             </div>
         </div>
         
@@ -116,13 +114,12 @@
                 @Html.ValidationMessageFor(m => m.UserInfoModel.Address2)
             </div>
             <div class="span6">
-               
             </div>
         </div>
         
         <br />
         <p>
-            <button type="submit" class="btn btn-primary btn-large" tabindex = "16">Register &raquo;</button>
+            <button type="submit" class="btn btn-primary btn-large" tabindex = "17">Register &raquo;</button>
         </p>
     }
 </div>

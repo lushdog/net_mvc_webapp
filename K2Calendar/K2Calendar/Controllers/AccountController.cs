@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
 using K2Calendar.Models;
+using System.Data.Services.Client;
+using System.Data.Objects;
 
 namespace K2Calendar.Controllers
 {
@@ -68,7 +70,6 @@ namespace K2Calendar.Controllers
 
         public ActionResult Register()
         {
-            GenerateRanksList();
             return View();
         }
 
@@ -81,13 +82,13 @@ namespace K2Calendar.Controllers
         {
             if (ModelState.IsValid)
             {
-                RegisterModel registerModel = model.RegisterModel;
+                CreateMembershipModel registerModel = model.RegisterModel;
                 UserInfoModel userInfoModel = model.UserInfoModel;
                 
                 // Attempt to register the user in membership provider
                 MembershipCreateStatus createStatus;
                 MembershipUser newUser = Membership.CreateUser(registerModel.UserName, registerModel.Password, registerModel.Email, null, null, true, null, out createStatus);
-                
+              
                 if (createStatus == MembershipCreateStatus.Success)
                 {
                     try
@@ -95,8 +96,10 @@ namespace K2Calendar.Controllers
                         userInfoModel.MembershipId = new Guid(newUser.ProviderUserKey.ToString());
                         userInfoModel.SignUpDate = DateTime.Now.ToUniversalTime();
                         userInfoModel.IsActive = true;
+                        userInfoModel.RankId = dbContext.Ranks.Min(r => r.Level);
                         dbContext.Users.Add(userInfoModel);
                         dbContext.SaveChanges();
+                        Roles.AddUserToRole(registerModel.UserName, "User");
                     }
                     catch (Exception ex)
                     {
@@ -114,7 +117,6 @@ namespace K2Calendar.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            GenerateRanksList();
             return View(model);
         }
 
@@ -123,6 +125,9 @@ namespace K2Calendar.Controllers
        
         public ActionResult Edit(int id)
         {
+            if (GetCurrentUserInfo(Membership.GetUser()).Id != id)
+                throw new InvalidOperationException("User does not have permission to edit a different user's account.");
+              
             UserInfoModel userInfoModel = dbContext.Users.Find(id);
 
             if (userInfoModel == null)
@@ -133,31 +138,40 @@ namespace K2Calendar.Controllers
             if (userInfoModel == null)
                 throw new InvalidOperationException("Could not find MembershipUser for provided MembershipId.");
 
-            RegisterModel registerModel = new RegisterModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
-            UserInfoAndRegisterModel model = new UserInfoAndRegisterModel { UserInfoModel = userInfoModel, RegisterModel = registerModel };
-            GenerateRanksList();
-            return View(model);
+            UserEditInfoModel userEditInfoModel = new UserEditInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
+            userEditInfoModel.UserInfoModel = userInfoModel;
+            return View(userEditInfoModel);
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult Edit(UserInfoAndRegisterModel model)
+        public ActionResult Edit(UserEditInfoModel model)
         {
+            UserInfoModel currentUserInfo = GetCurrentUserInfo(Membership.GetUser());
+            if (currentUserInfo.Id != model.UserInfoModel.Id)
+                throw new InvalidOperationException("User does not have permission to edit a different user's account.");
+          
             if (ModelState.IsValid)
             {
                 try
                 {
-                    dbContext.Entry(model.UserInfoModel).State = System.Data.EntityState.Modified;
+                    model.UserInfoModel.RankId = currentUserInfo.RankId;
+                    dbContext.Entry(currentUserInfo).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
                 catch (Exception ex)
                 {
-                    throw new InvalidOperationException("Failed to update UserInfoModel", ex.InnerException);
+                    throw new InvalidOperationException("Failed to update UserInfoModel", ex);
                 }
             }
-            GenerateRanksList();
             return View(model);
+        }
+
+        public UserInfoModel GetCurrentUserInfo(MembershipUser currentUser)
+        {
+            Guid currentUserKey = new Guid(currentUser.ProviderUserKey.ToString());
+            return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
         }
        
         //
@@ -224,6 +238,11 @@ namespace K2Calendar.Controllers
             ViewBag.RankList = new SelectList(ranksQuery, "Id", "Name", selectedRankId);
         }
 
+        private void GenerateRoleList(object selectedRoleName = null)
+        {
+            string[] roleNames = Roles.GetAllRoles();
+            ViewBag.RoleList = new SelectList(roleNames, selectedRoleName);
+        }
 
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
