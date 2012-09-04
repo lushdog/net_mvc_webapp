@@ -7,5 +7,6 @@ namespace K2Calendar.Models
 {
     public class AdminModels
     {
+        
     }
 }

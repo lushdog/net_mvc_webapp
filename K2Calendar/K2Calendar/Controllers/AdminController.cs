@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using K2Calendar.Models;
+using K2Calendar.Controllers;
 
 namespace K2Calendar.Views.Admin
 {
@@ -10,13 +11,6 @@ namespace K2Calendar.Views.Admin
     {
         AppDbContext dbContext = new AppDbContext();
         
-        //
-        // GET: /Admin/
-
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+       
     }
 }

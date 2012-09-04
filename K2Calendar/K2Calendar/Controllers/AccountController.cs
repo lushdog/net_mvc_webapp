@@ -11,14 +11,12 @@ namespace K2Calendar.Controllers
         AppDbContext dbContext = new AppDbContext();
 
         // GET: /Account/LogOn
-
         public ActionResult LogOn()
         {
             return View();
         }
 
         // POST: /Account/LogOn
-
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
@@ -47,9 +45,7 @@ namespace K2Calendar.Controllers
             return View(model);
         }
 
-        //
         // GET: /Account/LogOff
-
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
@@ -57,16 +53,13 @@ namespace K2Calendar.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        
         // GET: /Account/Register
-
         public ActionResult Register()
         {
             return View();
         }
 
         // POST: /Account/Register
-
         [HttpPost]
         [Authorize]
         public ActionResult Register(CreateUserModel model)
@@ -110,35 +103,33 @@ namespace K2Calendar.Controllers
             return View(model);
         }
 
-        
-        //
         // GET: /Account/Edit
-       
         public ActionResult Edit(int id)
         {
-            if (GetCurrentUserInfo(Membership.GetUser()).Id != id)
+            if (GetUserInfoFromMembershipId(Membership.GetUser()).Id != id)
                 throw new InvalidOperationException("User does not have permission to edit a different user's account.");
               
-            UserInfoModel userInfoModel = dbContext.Users.Find(id);
+            UserInfoModel userToEdit = dbContext.Users.Include("Rank").Single(u => u.Id == id);
 
-            if (userInfoModel == null)
+            if (userToEdit == null)
                 throw new InvalidOperationException("Could not find UserInfo for provided Id.");
 
-            MembershipUser membershipUser = Membership.GetUser(userInfoModel.MembershipId);
+            MembershipUser membershipUser = Membership.GetUser(userToEdit.MembershipId);
 
-            if (userInfoModel == null)
+            if (membershipUser == null)
                 throw new InvalidOperationException("Could not find MembershipUser for provided MembershipId.");
 
-            UserEditInfoModel userEditInfoModel = new UserEditInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
-            userEditInfoModel.UserInfoModel = userInfoModel;
-            return View(userEditInfoModel);
+            EditUserInfoModel editUserInfoModel = new EditUserInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
+            editUserInfoModel.UserInfoModel = userToEdit;
+            return View(editUserInfoModel);
         }
 
+        // POST: /Account/Edit
         [Authorize]
         [HttpPost]
-        public ActionResult Edit(UserEditInfoModel model)
+        public ActionResult Edit(EditUserInfoModel model)
         {
-            UserInfoModel currentUserInfo = GetCurrentUserInfo(Membership.GetUser());
+            UserInfoModel currentUserInfo = GetUserInfoFromMembershipId(Membership.GetUser());
             if (currentUserInfo.Id != model.UserInfoModel.Id)
                 throw new InvalidOperationException("User does not have permission to edit a different user's account.");
           
@@ -147,6 +138,9 @@ namespace K2Calendar.Controllers
                 try
                 {
                     model.UserInfoModel.RankId = currentUserInfo.RankId;
+                    model.UserInfoModel.SignUpDate = currentUserInfo.SignUpDate;
+                    model.UserInfoModel.MembershipId = currentUserInfo.MembershipId;
+                    model.UserInfoModel.EnrollmentDate = currentUserInfo.EnrollmentDate;
                     dbContext.Entry(currentUserInfo).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
                     return RedirectToAction("Index", "Home");
@@ -159,15 +153,54 @@ namespace K2Calendar.Controllers
             return View(model);
         }
 
-        public UserInfoModel GetCurrentUserInfo(MembershipUser currentUser)
+        // GET: /Account/Admin/
+        [Authorize(Roles = "Administrator")]
+        public ActionResult Admin(int id)
         {
-            Guid currentUserKey = new Guid(currentUser.ProviderUserKey.ToString());
-            return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
-        }
-       
-        
-        // GET: /Account/ChangePassword
+            UserInfoModel userToAdmin = dbContext.Users.Find(id);
+            GenerateRanksList();
+            GenerateRoleList();
 
+            if (userToAdmin == null)
+                throw new InvalidOperationException("Could not find UserInfo for provided Id.");
+
+            MembershipUser membershipUser = Membership.GetUser(userToAdmin.MembershipId);
+
+            if (membershipUser == null)
+                throw new InvalidOperationException("Could not find MembershipUser for provided MembershipId.");
+
+            EditUserInfoModel editUserInfoModel = new EditUserInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
+            editUserInfoModel.UserInfoModel = userToAdmin;
+            return View(editUserInfoModel);
+        }
+
+        // POST: /Account/Admin/
+        [Authorize(Roles = "Administrator")]
+        [HttpPost]
+        public ActionResult Admin(EditUserInfoModel model)
+        {
+            UserInfoModel userToAdmin = dbContext.Users.Find(model.UserInfoModel.Id);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.UserInfoModel.MembershipId = userToAdmin.MembershipId;
+                    dbContext.Entry(userToAdmin).CurrentValues.SetValues(model.UserInfoModel);
+                    dbContext.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+                catch (Exception ex)
+                {
+                    throw new InvalidOperationException("Failed to update UserInfoModel", ex);
+                }
+            }
+            GenerateRanksList();
+            GenerateRoleList();
+            return View(model);
+        }
+
+        // GET: /Account/ChangePassword
         [Authorize]
         public ActionResult ChangePassword()
         {
@@ -175,7 +208,6 @@ namespace K2Calendar.Controllers
         }
 
         // POST: /Account/ChangePassword
-
         [Authorize]
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
@@ -211,15 +243,18 @@ namespace K2Calendar.Controllers
         }
                 
         // GET: /Account/ChangePasswordSuccess
-
         public ActionResult ChangePasswordSuccess()
         {
             return View();
         }
 
 
-
-
+        public UserInfoModel GetUserInfoFromMembershipId(MembershipUser currentUser)
+        {
+            Guid currentUserKey = new Guid(currentUser.ProviderUserKey.ToString());
+            return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
+        }
+    
         private void GenerateRanksList(object selectedRankId = null)
         {
             var ranksQuery = from ranks in dbContext.Ranks

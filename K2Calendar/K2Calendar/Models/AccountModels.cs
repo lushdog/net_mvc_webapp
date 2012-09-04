@@ -5,7 +5,6 @@ using System.Web.Mvc;
 
 namespace K2Calendar.Models
 {
-
     public class ChangePasswordModel
     {
         [Required]
@@ -148,7 +147,7 @@ namespace K2Calendar.Models
         public UserInfoModel UserInfoModel { get; set; }
     }
 
-    public class UserEditInfoModel
+    public class EditUserInfoModel
     {
         [Editable(false)]
         [Display(Name = "User name")]
