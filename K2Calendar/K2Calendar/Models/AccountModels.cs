@@ -159,7 +159,24 @@ namespace K2Calendar.Models
 
         public UserInfoModel UserInfoModel { get; set; }
     }
-    
+
+    public class AdminUserInfoModel
+    {
+        [Editable(false)]
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
+
+        [Editable(false)]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Editable(false)]
+        [Display(Name = "Role")]
+        public string Role { get; set; }
+
+        public UserInfoModel UserInfoModel { get; set; }
+    }
+
     public class UserRankModel
     {
         [Key]

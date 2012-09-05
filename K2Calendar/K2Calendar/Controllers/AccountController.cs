@@ -169,24 +169,27 @@ namespace K2Calendar.Controllers
             if (membershipUser == null)
                 throw new InvalidOperationException("Could not find MembershipUser for provided MembershipId.");
 
-            EditUserInfoModel editUserInfoModel = new EditUserInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
-            editUserInfoModel.UserInfoModel = userToAdmin;
-            return View(editUserInfoModel);
+            AdminUserInfoModel model = new AdminUserInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName, Role = Roles.GetRolesForUser(membershipUser.UserName).Single() };
+            model.UserInfoModel = userToAdmin;
+            return View(model);
         }
 
         // POST: /Account/Admin/
         [Authorize(Roles = "Administrator")]
         [HttpPost]
-        public ActionResult Admin(EditUserInfoModel model)
+        public ActionResult Admin(AdminUserInfoModel model)
         {
-            UserInfoModel userToAdmin = dbContext.Users.Find(model.UserInfoModel.Id);
+            UserInfoModel userToUpdate = dbContext.Users.Find(model.UserInfoModel.Id);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.UserInfoModel.MembershipId = userToAdmin.MembershipId;
-                    dbContext.Entry(userToAdmin).CurrentValues.SetValues(model.UserInfoModel);
+                    model.UserInfoModel.MembershipId = userToUpdate.MembershipId;
+                    MembershipUser membershipUserToUpdate = Membership.GetUser(userToUpdate.MembershipId);
+                    Roles.RemoveUserFromRoles(membershipUserToUpdate.UserName, Roles.GetRolesForUser(membershipUserToUpdate.UserName));
+                    Roles.AddUserToRole(membershipUserToUpdate.UserName, model.Role);
+                    dbContext.Entry(userToUpdate).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
@@ -249,9 +252,9 @@ namespace K2Calendar.Controllers
         }
 
 
-        public UserInfoModel GetUserInfoFromMembershipId(MembershipUser currentUser)
+        public UserInfoModel GetUserInfoFromMembershipId(MembershipUser user)
         {
-            Guid currentUserKey = new Guid(currentUser.ProviderUserKey.ToString());
+            Guid currentUserKey = new Guid(user.ProviderUserKey.ToString());
             return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
         }
     

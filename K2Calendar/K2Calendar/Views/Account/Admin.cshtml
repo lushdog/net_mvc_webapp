@@ -1,4 +1,4 @@
-﻿@model K2Calendar.Models.EditUserInfoModel
+﻿@model K2Calendar.Models.AdminUserInfoModel
 @{
     ViewBag.Title = "Update User";
 }
@@ -11,119 +11,44 @@
     <p>
         @Html.ValidationSummary(true, "Account update was unsuccessful. Please correct the errors and try again.")
     </p>
-    <script src="@Url.Content("~/Scripts/jquery.validate.js")" type="text/javascript"></script>
-    <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    @Html.Partial("_ValidateScripts")
     @using (Html.BeginForm())
     {
-        @Html.HiddenFor(m => m.UserInfoModel.Id)
+        @Html.HiddenFor(m => m.UserInfoModel.Id) 
+        @Html.HiddenFor(m => m.UserName)
+        @Html.HiddenFor(m => m.Email)
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span12">
                 @Html.LabelFor(m => m.UserName)
-                @Html.TextBoxFor(m => m.UserName, new { tabindex = "1" , disabled = "disabled" } )
-                @Html.ValidationMessageFor(m => m.UserName)
-            </div>
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.PhoneNumber)
-                @Html.TextBoxFor(m => m.UserInfoModel.PhoneNumber, new { tabindex = "7" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.PhoneNumber)
-                
+                @Html.TextBoxFor(m => m.UserName, new { disabled = "disabled" })
             </div>
         </div>
-        
         <div class="row-fluid">
-            <div class="span6">
+            <div class="span12">
                 @Html.LabelFor(m => m.Email)
-                @Html.TextBoxFor(m => m.Email, new { tabindex = "2" , disabled = "disabled" })
-                @Html.ValidationMessageFor(m => m.Email)
-            </div>
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.State)
-                @Html.TextBoxFor(m => m.UserInfoModel.State, new { tabindex = "8" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.State)
+                @Html.TextBoxFor(m => m.Email, new { disabled = "disabled" })
             </div>
         </div>
-       
         <div class="row-fluid">
-            <div class="span6"> 
-                @Html.LabelFor(m => m.UserInfoModel.RankId)
-                @Html.DropDownListFor(m => m.UserInfoModel.RankId, (SelectList)ViewBag.RankList, new { tabindex = "13" })
-            </div>
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.ZipCode)
-                @Html.TextBoxFor(m => m.UserInfoModel.ZipCode, new { tabindex = "9" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.ZipCode)
-            </div>
+            @Html.LabelFor(m => m.UserInfoModel.SignUpDate)
+            @Html.TextBoxFor(m => m.UserInfoModel.SignUpDate, new { placeholder = "mm/dd/yyyy" })
+            @Html.ValidationMessageFor(m => m.UserInfoModel.SignUpDate)
         </div>
+        <div class="row-fluid">
+            @Html.LabelFor(m => m.UserInfoModel.RankId)
+            @Html.DropDownListFor(m => m.UserInfoModel.RankId, (SelectList)ViewBag.RankList)
+        </div>  
+        <div class="row-fluid">
+            @Html.LabelFor(m => m.Role)
+            @Html.DropDownListFor(m => m.Role, (SelectList)ViewBag.RoleList)
+        </div>      
         
-        <div class="row-fluid">
-            <div class="span6"> 
-                @Html.LabelFor(m => m.UserInfoModel.SignUpDate)
-                @Html.TextBoxFor(m => m.UserInfoModel.SignUpDate, new { tabindex = "12", placeholder = "mm/dd/yyyy" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.SignUpDate)
-            </div>
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.Country)
-                @Html.TextBoxFor(m => m.UserInfoModel.Country, new { tabindex = "10" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.Country)
-            </div>
-        </div>
-                
-        <div class="row-fluid">
-            <div class="span6"> 
-                @Html.LabelFor(m => m.UserInfoModel.FirstName)
-                @Html.TextBoxFor(m => m.UserInfoModel.FirstName, new { tabindex = "3" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.FirstName)
-            </div>
-            <div class="span6">
-                 @Html.LabelFor(m => m.UserInfoModel.BirthDate)
-                @Html.TextBoxFor(m => m.UserInfoModel.BirthDate, new { tabindex = "11", placeholder = "mm/dd/yyyy" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.BirthDate)
-            </div>
-        </div>
-        
-        <div class="row-fluid">
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.LastName)
-                @Html.TextBoxFor(m => m.UserInfoModel.LastName, new { tabindex = "4" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.LastName)
-            </div>
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.EnrollmentDate)
-                @Html.TextBoxFor(m => m.UserInfoModel.EnrollmentDate, new { tabindex = "12", placeholder = "mm/dd/yyyy" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.EnrollmentDate)
-            </div>
-        </div>
-        
-        <div class="row-fluid">
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.Address1)
-                @Html.TextBoxFor(m => m.UserInfoModel.Address1, new { tabindex = "5" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.Address1)
-            </div>
-            <div class="span6">
-            </div>
-        </div>
-        
-        <div class="row-fluid">
-            <div class="span6">
-                @Html.LabelFor(m => m.UserInfoModel.Address2)
-                @Html.TextBoxFor(m => m.UserInfoModel.Address2, new { tabindex = "6" })
-                @Html.ValidationMessageFor(m => m.UserInfoModel.Address2)
-            </div>
-            <div class="span6">
-            </div>
-        </div>
-        
-        <div class="row-fluid">
-            <div class="span6">
-            </div>
-            <div class="span6">
-            </div>
-        </div>
+        @Html.EditorFor(m => Model.UserInfoModel)
         
         <br />
         <p>
-            <button type="submit" class="btn btn-primary btn-large" tabindex = "14">Update &raquo;</button>
+            <button type="submit" class="btn btn-primary btn-large" tabindex="14">
+                Update &raquo;</button>
         </p>
     }
 </div>
