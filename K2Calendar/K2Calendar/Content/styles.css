@@ -5,7 +5,7 @@
     background-color: #F5F5F5;
 }
 
-.validation-summary-errors, .field-validation-error
+.field-validation-error
 {
     color: red;
 }

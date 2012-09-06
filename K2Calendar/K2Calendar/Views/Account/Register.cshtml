@@ -12,9 +12,7 @@
         Passwords are required to be a minimum of @Membership.MinRequiredPasswordLength
         characters in length.
     </p>
-    <p>
-        @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.")
-    </p>
+    @Html.ValidationSummary(true, "Account creation was unsuccessful. Please correct the errors and try again.", new { @class = "alert alert-error" })
     @Html.Partial("_ValidateScripts")
     @using (Html.BeginForm())
     {

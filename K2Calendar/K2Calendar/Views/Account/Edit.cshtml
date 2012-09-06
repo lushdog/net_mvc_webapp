@@ -8,9 +8,7 @@
     <p>
         Use the form below to update the account.
     </p>
-    <p>
-        @Html.ValidationSummary(true, "Account update was unsuccessful. Please correct the errors and try again.")
-    </p>
+    @Html.ValidationSummary(true, "Account update was unsuccessful. Please correct the errors and try again.", new { @class = "alert alert-error" })
     @Html.Partial("_ValidateScripts")
     @using (Html.BeginForm())
     {
