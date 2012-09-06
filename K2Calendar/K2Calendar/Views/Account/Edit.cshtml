@@ -5,6 +5,13 @@
 <div class="container">
     <h2>
         Update Account Details</h2>
+    @if (TempData["isSuccessEdit"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Success!</strong> Account has been updated.
+        </div>
+    }
     <p>
         Use the form below to update the account.
     </p>

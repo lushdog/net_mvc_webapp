@@ -82,7 +82,7 @@ namespace K2Calendar.Controllers
                         userInfoModel.RankId = dbContext.Ranks.Min(r => r.Level);
                         dbContext.Users.Add(userInfoModel);
                         dbContext.SaveChanges();
-                        Roles.AddUserToRole(model.UserName, "User");
+                       Roles.AddUserToRole(model.UserName, "User");
                     }
                     catch (Exception ex)
                     {
@@ -90,8 +90,11 @@ namespace K2Calendar.Controllers
                         throw new InvalidOperationException("Could not create UserInfoModel.", ex);
                     }
 
-                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
+                    //TODO: remove comment below when user's are allowed to register and not just admins
+                    //FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
+                    
+                    TempData["isSuccessRegister"] = true;
+                    return RedirectToAction("Admin", new { id = GetUserInfoFromMembershipUser(newUser).Id });
                 }
                 else
                 {
@@ -106,7 +109,7 @@ namespace K2Calendar.Controllers
         // GET: /Account/Edit
         public ActionResult Edit(int id)
         {
-            if (GetUserInfoFromMembershipId(Membership.GetUser()).Id != id)
+            if (GetUserInfoFromMembershipUser(Membership.GetUser()).Id != id)
                 throw new InvalidOperationException("User does not have permission to edit a different user's account.");
               
             UserInfoModel userToEdit = dbContext.Users.Include("Rank").Single(u => u.Id == id);
@@ -121,6 +124,7 @@ namespace K2Calendar.Controllers
 
             EditUserInfoModel editUserInfoModel = new EditUserInfoModel { Email = membershipUser.Email, UserName = membershipUser.UserName };
             editUserInfoModel.UserInfoModel = userToEdit;
+
             return View(editUserInfoModel);
         }
 
@@ -129,7 +133,7 @@ namespace K2Calendar.Controllers
         [HttpPost]
         public ActionResult Edit(EditUserInfoModel model)
         {
-            UserInfoModel currentUserInfo = GetUserInfoFromMembershipId(Membership.GetUser());
+            UserInfoModel currentUserInfo = GetUserInfoFromMembershipUser(Membership.GetUser());
             if (currentUserInfo.Id != model.UserInfoModel.Id)
                 throw new InvalidOperationException("User does not have permission to edit a different user's account.");
           
@@ -143,7 +147,8 @@ namespace K2Calendar.Controllers
                     model.UserInfoModel.EnrollmentDate = currentUserInfo.EnrollmentDate;
                     dbContext.Entry(currentUserInfo).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                    TempData["isSuccessEdit"] = true;
+                    return RedirectToAction("Edit");
                 }
                 catch (Exception ex)
                 {
@@ -191,7 +196,8 @@ namespace K2Calendar.Controllers
                     Roles.AddUserToRole(membershipUserToUpdate.UserName, model.Role);
                     dbContext.Entry(userToUpdate).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
-                    return RedirectToAction("Index", "Home");
+                    TempData["isSuccessAdmin"] = true;
+                    return RedirectToAction("Admin");
                 }
                 catch (Exception ex)
                 {
@@ -252,7 +258,7 @@ namespace K2Calendar.Controllers
         }
 
 
-        public UserInfoModel GetUserInfoFromMembershipId(MembershipUser user)
+        public UserInfoModel GetUserInfoFromMembershipUser(MembershipUser user)
         {
             Guid currentUserKey = new Guid(user.ProviderUserKey.ToString());
             return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
