@@ -115,7 +115,7 @@ namespace K2Calendar.Models
         public int RankId { get; set; }
 
         [ForeignKey("RankId")]
-        public UserRankModel Rank { get; set; }
+        public RankModel Rank { get; set; }
 
         [Display(Name = "IsActive")]
         public bool IsActive { get; set; }
@@ -177,12 +177,14 @@ namespace K2Calendar.Models
         public UserInfoModel UserInfoModel { get; set; }
     }
 
-    public class UserRankModel
+    public class RankModel
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int Id { get; set; }
+
+        public bool IsActive { get; set; }
 
         [Required]
         [Display(Name="Name")]

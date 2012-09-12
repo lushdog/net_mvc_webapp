@@ -1,0 +1,34 @@
+﻿@model K2Calendar.Models.PostModel
+@{
+    ViewBag.Title = "Create Technique";
+}
+<div class="container">
+    <h2>
+        Create a Technique</h2>
+    <p>
+        Use the form below to create a new technique.</p>
+    @Html.ValidationSummary(true, "Technique creation failed. Please correct the errors and try again.", new { @class = "alert alert-error" })
+    @Html.Partial("_ValidateScripts")
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+        @Html.LabelFor(model => model.Title)
+        @Html.TextBoxFor(model => model.Title)
+        @Html.ValidationMessageFor(model => model.Title)
+        @Html.LabelFor(model => model.Description)
+        @Html.TextAreaFor(model => model.Description)
+        @Html.ValidationMessageFor(model => model.Description)
+        @Html.LabelFor(model => model.RankId, "Rank")
+        @Html.DropDownListFor(m => m.RankId, (SelectList)ViewBag.RankList)
+        @Html.LabelFor(model => model.EventDate)
+        @Html.TextBoxFor(model => model.EventDate, new { placeholder = "mm/dd/yyyy" })
+        @Html.ValidationMessageFor(model => model.EventDate)
+        @Html.LabelFor(model => model.VideoUrl)
+        @Html.TextBoxFor(model => model.VideoUrl)
+        @Html.ValidationMessageFor(model => model.VideoUrl)
+        <p>
+            <button type="submit" class="btn btn-primary btn-large">
+                Create &raquo;</button>
+        </p>
+    }
+</div>

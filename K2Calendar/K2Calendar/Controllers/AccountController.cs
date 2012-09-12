@@ -79,7 +79,7 @@ namespace K2Calendar.Controllers
                         userInfoModel.MembershipId = new Guid(newUser.ProviderUserKey.ToString());
                         userInfoModel.SignUpDate = DateTime.Now.ToUniversalTime();
                         userInfoModel.IsActive = true;
-                        userInfoModel.RankId = dbContext.Ranks.Min(r => r.Level);
+                        userInfoModel.RankId = dbContext.Ranks.Where(r => r.IsActive == true).Min(r => r.Level);
                         dbContext.Users.Add(userInfoModel);
                         dbContext.SaveChanges();
                        Roles.AddUserToRole(model.UserName, "User");
@@ -163,7 +163,7 @@ namespace K2Calendar.Controllers
         public ActionResult Admin(int id)
         {
             UserInfoModel userToAdmin = dbContext.Users.Find(id);
-            GenerateRanksList();
+            GenerateRanksList(dbContext, ViewBag);
             GenerateRoleList();
 
             if (userToAdmin == null)
@@ -204,7 +204,7 @@ namespace K2Calendar.Controllers
                     throw new InvalidOperationException("Failed to update UserInfoModel", ex);
                 }
             }
-            GenerateRanksList();
+            GenerateRanksList(dbContext, ViewBag);
             GenerateRoleList();
             return View(model);
         }
@@ -256,20 +256,21 @@ namespace K2Calendar.Controllers
         {
             return View();
         }
-
-
+        
         public UserInfoModel GetUserInfoFromMembershipUser(MembershipUser user)
         {
             Guid currentUserKey = new Guid(user.ProviderUserKey.ToString());
             return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
         }
     
-        private void GenerateRanksList(object selectedRankId = null)
+        public static void GenerateRanksList(AppDbContext dbContext, dynamic viewBag, object selectedRankId = null)
         {
+            //TODO: handle a user who has a rank that is not active
+            //note that you can't set a SelectListItem to disabled from here (that I know of)
             var ranksQuery = from ranks in dbContext.Ranks
                              orderby ranks.Level ascending
                              select ranks;
-            ViewBag.RankList = new SelectList(ranksQuery, "Id", "Name", selectedRankId);
+            viewBag.RankList = new SelectList(ranksQuery, "Id", "Name", selectedRankId);
         }
 
         private void GenerateRoleList(object selectedRoleName = null)
