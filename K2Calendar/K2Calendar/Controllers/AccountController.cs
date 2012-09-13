@@ -77,6 +77,8 @@ namespace K2Calendar.Controllers
                     try
                     {
                         userInfoModel.MembershipId = new Guid(newUser.ProviderUserKey.ToString());
+                        userInfoModel.BirthDate = userInfoModel.BirthDate.ToUniversalTime();
+                        userInfoModel.EnrollmentDate = userInfoModel.EnrollmentDate.ToUniversalTime();
                         userInfoModel.SignUpDate = DateTime.Now.ToUniversalTime();
                         userInfoModel.IsActive = true;
                         userInfoModel.RankId = dbContext.Ranks.Where(r => r.IsActive == true).Min(r => r.Level);
@@ -141,10 +143,14 @@ namespace K2Calendar.Controllers
             {
                 try
                 {
+                    //following fields are not editable by user
                     model.UserInfoModel.RankId = currentUserInfo.RankId;
                     model.UserInfoModel.SignUpDate = currentUserInfo.SignUpDate;
                     model.UserInfoModel.MembershipId = currentUserInfo.MembershipId;
                     model.UserInfoModel.EnrollmentDate = currentUserInfo.EnrollmentDate;
+
+                    model.UserInfoModel.BirthDate = model.UserInfoModel.BirthDate.ToUniversalTime();
+                    
                     dbContext.Entry(currentUserInfo).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
                     TempData["isSuccessEdit"] = true;

@@ -7,16 +7,16 @@ namespace K2Calendar.Models
         public DbSet<UserInfoModel> Users { get; set; }
         public DbSet<RankModel> Ranks { get; set; }
         public DbSet<PostModel> Posts { get; set; }
-        public DbSet<CategoryModel> Categories { get; set; }
+        public DbSet<TagModel> Tags { get; set; }
         public DbSet<CommentModel> Comments { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PostModel>()
-            .HasMany(p => p.Categories).WithMany(c => c.Posts)
+            .HasMany(p => p.Tags).WithMany(c => c.Posts)
             .Map(t => t.MapLeftKey("PostId")
-            .MapRightKey("CategoryId")
-            .ToTable("PostCategories"));
+            .MapRightKey("TagId")
+            .ToTable("PostTags"));
         }
     }
 }
