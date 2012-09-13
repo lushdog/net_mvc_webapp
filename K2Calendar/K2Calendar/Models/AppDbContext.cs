@@ -1,4 +1,5 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 
 namespace K2Calendar.Models
 {
@@ -17,6 +18,8 @@ namespace K2Calendar.Models
             .Map(t => t.MapLeftKey("PostId")
             .MapRightKey("TagId")
             .ToTable("PostTags"));
+
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
         }
     }
 }

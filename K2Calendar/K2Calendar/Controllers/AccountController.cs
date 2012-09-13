@@ -54,6 +54,7 @@ namespace K2Calendar.Controllers
         }
 
         // GET: /Account/Register
+        [Authorize(Roles="Administrator")]
         public ActionResult Register()
         {
             return View();
@@ -96,7 +97,7 @@ namespace K2Calendar.Controllers
                     //FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     
                     TempData["isSuccessRegister"] = true;
-                    return RedirectToAction("Admin", new { id = GetUserInfoFromMembershipUser(newUser).Id });
+                    return RedirectToAction("Admin", new { id = GetUserInfoFromMembershipUser(newUser, dbContext).Id });
                 }
                 else
                 {
@@ -109,9 +110,10 @@ namespace K2Calendar.Controllers
         }
 
         // GET: /Account/Edit
+        [Authorize]
         public ActionResult Edit(int id)
         {
-            if (GetUserInfoFromMembershipUser(Membership.GetUser()).Id != id)
+            if (GetUserInfoFromMembershipUser(Membership.GetUser(), dbContext).Id != id)
                 throw new InvalidOperationException("User does not have permission to edit a different user's account.");
               
             UserInfoModel userToEdit = dbContext.Users.Include("Rank").Single(u => u.Id == id);
@@ -135,7 +137,7 @@ namespace K2Calendar.Controllers
         [HttpPost]
         public ActionResult Edit(EditUserInfoModel model)
         {
-            UserInfoModel currentUserInfo = GetUserInfoFromMembershipUser(Membership.GetUser());
+            UserInfoModel currentUserInfo = GetUserInfoFromMembershipUser(Membership.GetUser(), dbContext);
             if (currentUserInfo.Id != model.UserInfoModel.Id)
                 throw new InvalidOperationException("User does not have permission to edit a different user's account.");
           
@@ -214,6 +216,7 @@ namespace K2Calendar.Controllers
             GenerateRoleList();
             return View(model);
         }
+        //TODO: make user inactive
 
         // GET: /Account/ChangePassword
         [Authorize]
@@ -263,7 +266,10 @@ namespace K2Calendar.Controllers
             return View();
         }
         
-        public UserInfoModel GetUserInfoFromMembershipUser(MembershipUser user)
+
+        //Account helper methods
+
+        public static UserInfoModel GetUserInfoFromMembershipUser(MembershipUser user, AppDbContext dbContext)
         {
             Guid currentUserKey = new Guid(user.ProviderUserKey.ToString());
             return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
