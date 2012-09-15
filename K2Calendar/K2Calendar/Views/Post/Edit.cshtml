@@ -1,75 +1,25 @@
 ﻿@model K2Calendar.Models.PostModel
-
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Technique";
 }
 
-<h2>Edit</h2>
-
-<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
-<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
-
-@using (Html.BeginForm()) {
-    @Html.ValidationSummary(true)
-    <fieldset>
-        <legend>PostModel</legend>
-
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.IsActive)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.IsActive)
-            @Html.ValidationMessageFor(model => model.IsActive)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Title)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Title)
-            @Html.ValidationMessageFor(model => model.Title)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Description)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Description)
-            @Html.ValidationMessageFor(model => model.Description)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.RankId, "Rank")
-        </div>
-        <div class="editor-field">
-            @Html.DropDownList("RankId", String.Empty)
-            @Html.ValidationMessageFor(model => model.RankId)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.Date)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.Date)
-            @Html.ValidationMessageFor(model => model.Date)
-        </div>
-
-        <div class="editor-label">
-            @Html.LabelFor(model => model.VideoUrl)
-        </div>
-        <div class="editor-field">
-            @Html.EditorFor(model => model.VideoUrl)
-            @Html.ValidationMessageFor(model => model.VideoUrl)
-        </div>
+<div class="container">
+    <h2>
+        Edit a Technique</h2>
+    <p>
+        Use the form below to edit the technique.</p>
+    @Html.ValidationSummary(true, "Technique edit failed. Please correct the errors and try again.", new { @class = "alert alert-error" })
+    @Html.Partial("_ValidateScripts")
+    <script src="@Url.Content("~/Scripts/jquery.tokeninput.js")" type="text/javascript"></script>
+    
+    @using (Html.BeginForm())
+    {
+        
+        @Html.EditorForModel(Model)
 
         <p>
-            <input type="submit" value="Save" />
+            <button type="submit" class="btn btn-primary btn-large">
+                Update &raquo;</button>
         </p>
-    </fieldset>
-}
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    }
 </div>
