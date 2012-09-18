@@ -1,45 +1,45 @@
 ﻿@model K2Calendar.Models.PostModel
-
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Technique";
 }
-
-<h2>Details</h2>
-
-<fieldset>
-    <legend>PostModel</legend>
-
-    <div class="display-label">IsActive</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.IsActive)
+<script src="@Url.Content("~/Scripts/jquery.tokeninput.js")" type="text/javascript"></script>
+<div class="container" id="PostDetails">
+    <div class="row-fluid">
+        <div class = "span12" align="center">
+            <iframe width="560" height="315" src="@Model.VideoUrl" frameborder="0" allowfullscreen></iframe>
+        </div>
     </div>
-
-    <div class="display-label">Title</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Title)
+    <div class="row-fluid">
+        <div class = "span8">
+            <h2>@Html.DisplayFor(model => model.Title)</h2>
+        </div>
+        <div class = "span4">
+            <h2><img src="@Url.Content("~/Content/images/")@Model.Rank.Image" alt= @Model.Rank.Name) /></h2>
+        </div>
     </div>
-
-    <div class="display-label">Description</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Description)
+    <div class="row-fluid">
+        <div class = "span12">
+            @Html.DisplayFor(model => model.Description)
+        </div>
     </div>
-
-    <div class="display-label">Rank</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Rank.Name)
+    <div class="row-fluid">
+        <div class = "span12">
+            Taught:<br /> @Model.EventDate.ToLocalTime().ToShortDateString()
+        </div>
     </div>
-
-    <div class="display-label">Date</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Date)
+    <div class="row-fluid">
+        <div class = "span12">
+            Tags: <input type="text" id="TagsInput" name="TagsInput" />
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $("#TagsInput").tokenInput("", {
+                        theme: "facebook",
+                        disabled: true,   
+                        deleteText: "",            
+                        @Html.Raw(ViewBag.ExistingTags)          
+                    });
+                });
+            </script>
+        </div>
     </div>
-
-    <div class="display-label">VideoUrl</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.VideoUrl)
-    </div>
-</fieldset>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+</div>

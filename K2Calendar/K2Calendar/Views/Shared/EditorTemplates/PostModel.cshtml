@@ -1,19 +1,4 @@
 ﻿@model K2Calendar.Models.PostModel
-@{
-    string existingTags = "";
-    if(Model.Tags != null || Model.Tags.Count > 0)  
-    {
-        System.Text.StringBuilder prePopulate = new System.Text.StringBuilder("prePopulate: [ \n");
-        foreach(var tag in Model.Tags)
-        {
-            string tagString = string.Format(@"{{id:{0}, name:""{1}""}},", tag.Id, tag.Name);
-            prePopulate.Append(tagString);
-        }
-        prePopulate.Remove(prePopulate.Length-1,1); //remove trailing comma
-        prePopulate.Append("]");
-        existingTags = prePopulate.ToString();        
-    }
-}
 
 @Html.LabelFor(model => model.Title)
 @Html.TextBoxFor(model => model.Title)
@@ -40,7 +25,7 @@
             hintText: "e.g. 'armbar' 'back mount' 'Barrhaven' ...",
             noResultsText: "Nothing found. Press <Enter> to add this new tag.",
             searchingText: "Searching...",
-            @Html.Raw(existingTags)          
+            @Html.Raw(ViewBag.ExistingTags)          
         });
     });
 </script>

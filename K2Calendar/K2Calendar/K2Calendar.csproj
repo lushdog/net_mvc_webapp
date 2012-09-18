@@ -124,6 +124,13 @@
     <Compile Include="Models\PostModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\AdminController.cs" />
+    <Content Include="Content\images\black.png" />
+    <Content Include="Content\images\black_red.png" />
+    <Content Include="Content\images\blue.png" />
+    <Content Include="Content\images\brown.png" />
+    <Content Include="Content\images\purple.png" />
+    <Content Include="Content\images\red.png" />
+    <Content Include="Content\images\white.png" />
     <Content Include="Content\token-input-facebook.css" />
     <Content Include="Content\token-input-mac.css" />
     <Content Include="Content\token-input.css" />
