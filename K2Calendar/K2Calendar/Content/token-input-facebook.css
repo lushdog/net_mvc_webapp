@@ -4,7 +4,7 @@ ul.token-input-list-facebook {
     height: auto !important; 
     height: 1%;
     width: 400px;
-    border: 1px solid #8496ba;
+    /*border: 1px solid #8496ba;*/
     cursor: text;
     font-size: 12px;
     font-family: Verdana, sans-serif;
@@ -32,7 +32,7 @@ li.token-input-token-facebook {
     height: 15px;
     margin: 3px;
     padding: 1px 3px;
-    background-color: #eff2f7;
+    background-color: #90A9EB;
     color: #000;
     cursor: default;
     border: 1px solid #ccd5e4;
