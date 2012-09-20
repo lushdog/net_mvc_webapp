@@ -25,11 +25,6 @@ namespace K2Calendar.Controllers
                 if (Membership.ValidateUser(model.UserName, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-
-                    //set session vars for globabl nav bar stuff
-                    MembershipUser user = Membership.GetUser(model.UserName);
-                    Session.Add("rankimg", GetUserInfoFromMembershipUser(user, dbContext).Rank.Image);
-                    
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                     {
@@ -59,7 +54,7 @@ namespace K2Calendar.Controllers
         }
 
         // GET: /Account/Register
-        [Authorize(Roles="Administrator")]
+        [Authorize(Roles="Administrator,SuperAdmin")]
         public ActionResult Register()
         {
             return View();

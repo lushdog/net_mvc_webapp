@@ -32,6 +32,28 @@ namespace K2Calendar
 
         }
 
+        /*
+        protected void Session_Start(object src, EventArgs e)
+        {
+            if (Context.Session != null)
+            {
+                if (Context.Session.IsNewSession)
+                {
+                    string sCookieHeader = Request.Headers["Cookie"];
+                    if ((null != sCookieHeader) && (sCookieHeader.IndexOf("ASP.NET_SessionId") >= 0))
+                    {
+                        // how to simulate it ???   
+                        // RedirectToAction(“ActionName”, “ControllerName”,  route values);  
+                        Response.Redirect("/Home/TestAction");
+                    }
+
+                }
+            }
+
+
+        }
+        */
+
         protected void Application_Start()
         {
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<AppDbContext, Configuration>());

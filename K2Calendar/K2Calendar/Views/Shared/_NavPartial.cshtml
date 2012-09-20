@@ -1,43 +1,63 @@
-﻿ <a class="brand" href="@Url.Action("Index", "Home")">K2 BJJ Portal</a>
- @if (Request.IsAuthenticated) { 
-    <ul class="nav">
-        <li class="active">
-            <a href="@Url.Action("Index", "Home")">Home</a>
-        </li>
-        <li>
-            <a href="@Url.Action("Post", "List")">Browse</a>
-        </li>
-        <li>
-            <a href="@Url.Action("Post", "Search")">Search</a>
-        </li>
-    </ul>
-                                
-    <ul class="nav pull-right">
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                @{
-                    if (HttpContext.Current.Session["rankimg"] == null)
-                    {
-                        HttpContext.Current.Session["rankimg"] = K2Calendar.Controllers.AccountController.GetUserInfoFromMembershipUser(Membership.GetUser(@User.Identity.Name), new K2Calendar.Models.AppDbContext()).Rank.Image;
-                    }                        
-                    var rankimg = HttpContext.Current.Session["rankimg"].ToString();
-                }
-                @User.Identity.Name
-                <img src="@Url.Content("~/Content/images/")@rankimg" width="50px" height="50px" alt="rankimg"/>
-                <b class="caret"></b>
+﻿<div class="navbar">
+    <div class="navbar-inner">
+        <div class="container">
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
             </a>
-        </li>
-    </ul>
+            <!-- Everything you want hidden at 940px or less, place within here -->
+            <div class="nav-collapse">
+                <div class="row-fluid">
+                    <a class="brand" href="@Url.Action("Index", "Home")">K2 BJJ Portal</a>
+                    @if (Request.IsAuthenticated)
+                    {
+                        var session = HttpContext.Current.Session;
+                        if (session["rankimg"] == null || session["userid"] == null)
+                        {
+                            K2Calendar.Models.UserInfoModel user = K2Calendar.Controllers.AccountController.GetUserInfoFromMembershipUser(Membership.GetUser(@User.Identity.Name), new K2Calendar.Models.AppDbContext());
+                            session["rankimg"] = user.Rank.Image;
+                            session["userid"] = user.Id;
+                        }
+                        var rankimg = session["rankimg"].ToString();
+                        var userid = session["userid"].ToString();
+     
+                        <ul class="nav">
+                            <li class="active"><a href="@Url.Action("Index", "Home")">Home</a> </li>
+                            <li><a href="@Url.Action("Post", "List")">Browse</a> </li>
+                            <li><a href="@Url.Action("Post", "Search")">Search</a> </li>
+                        </ul>
                                 
-    <form action="@Url.Action("Search", "Post")" class="navbar-search pull-right">
-        <input type="text" class="search-query" placeholder="Search">
-    </form>
-}
-else
-{
-    <form class="navbar-form pull-right" action="@Url.Action("LogOn", "Account")" method="post" style="margin-bottom:5px;">
-        <input type="text" class="span4" placeholder="Username" name="UserName" id="UserName"/>
-        <input type="password" class="span4" placeholder="Password" name="Password" id="Password" />
-        <button type="submit" class="btn btn-primary btn-large">Log In &raquo;</button>
-    </form>
-}
+                        <ul class="nav pull-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    @User.Identity.Name
+                                    <img src="@Url.Content("~/Content/images/")@rankimg" width="50px" height="50px" alt="rankimg"/>
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a href="@Url.Action("Edit", "Account", new { id = userid })">Account Details</a>
+                                        <a href="@Url.Action("LogOff", "Account")">Log Out</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                                
+                        <form action="@Url.Action("Search", "Post")" method="post" class="navbar-search pull-right">
+                            <input type="text" class="search-query" name="Query" id="Query" placeholder="Search">
+                        </form>
+                    }
+                    else
+                    {
+                        <form class="navbar-form pull-right" action="@Url.Action("LogOn", "Account")" method="post" style="margin-bottom:5px;">
+                        <input type="text" class="span4" placeholder="Username" name="UserName" id="UserName" />
+                        <input type="password" class="span4" placeholder="Password" name="Password" id="Password" />
+                        <button type="submit" class="btn btn-primary">
+                            Log In &raquo;</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
