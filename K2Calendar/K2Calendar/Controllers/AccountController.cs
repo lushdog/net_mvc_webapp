@@ -25,6 +25,11 @@ namespace K2Calendar.Controllers
                 if (Membership.ValidateUser(model.UserName, model.Password))
                 {
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+
+                    //set session vars for globabl nav bar stuff
+                    MembershipUser user = Membership.GetUser(model.UserName);
+                    Session.Add("rankimg", GetUserInfoFromMembershipUser(user, dbContext).Rank.Image);
+                    
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                     {
@@ -190,6 +195,7 @@ namespace K2Calendar.Controllers
         // POST: /Account/Admin/
         [Authorize(Roles = "Administrator")]
         [HttpPost]
+        //TODO: make user inactive
         public ActionResult Admin(AdminUserInfoModel model)
         {
             UserInfoModel userToUpdate = dbContext.Users.Find(model.UserInfoModel.Id);
@@ -216,8 +222,7 @@ namespace K2Calendar.Controllers
             GenerateRoleList();
             return View(model);
         }
-        //TODO: make user inactive
-
+        
         // GET: /Account/ChangePassword
         [Authorize]
         public ActionResult ChangePassword()
@@ -272,7 +277,7 @@ namespace K2Calendar.Controllers
         public static UserInfoModel GetUserInfoFromMembershipUser(MembershipUser user, AppDbContext dbContext)
         {
             Guid currentUserKey = new Guid(user.ProviderUserKey.ToString());
-            return dbContext.Users.Single(u => u.MembershipId == currentUserKey);
+            return dbContext.Users.Include("Rank").Single(u => u.MembershipId == currentUserKey);
         }
     
         public static void GenerateRanksList(AppDbContext dbContext, dynamic viewBag, object selectedRankId = null)
