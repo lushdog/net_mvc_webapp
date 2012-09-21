@@ -167,7 +167,7 @@ namespace K2Calendar.Controllers
         }
 
         // GET: /Account/Admin/
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,SuperAdmin")]
         public ActionResult Admin(int id)
         {
             UserInfoModel userToAdmin = dbContext.Users.Find(id);
@@ -188,7 +188,7 @@ namespace K2Calendar.Controllers
         }
 
         // POST: /Account/Admin/
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,SuperAdmin")]
         [HttpPost]
         //TODO: make user inactive
         public ActionResult Admin(AdminUserInfoModel model)
