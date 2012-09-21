@@ -1,4 +1,9 @@
-﻿.footer {
+﻿body
+{
+    background-color:#FDFDF0;  
+}
+
+.footer {
     padding: 70px 0;
     margin-top: 70px;
     border-top: 1px solid #E5E5E5;
@@ -8,6 +13,11 @@
 .field-validation-error
 {
     color: red;
+}
+
+.hero-unit
+{
+   /* border:1px solid #333333;   */
 }
 
 .sidebar
@@ -21,3 +31,6 @@
     background: linear-gradient(to right,  rgba(142,142,142,0) 1%,rgba(142,142,142,0.65) 7%,rgba(165,165,165,0.46) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008e8e8e', endColorstr='#75a5a5a5',GradientType=1 ); /* IE6-9 */
 }
+
+
+
