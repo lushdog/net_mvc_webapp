@@ -32,5 +32,10 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#008e8e8e', endColorstr='#75a5a5a5',GradientType=1 ); /* IE6-9 */
 }
 
+ul.token-input-list
+{
+    width:210px;
+}
+
 
 
