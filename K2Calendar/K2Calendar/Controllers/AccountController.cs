@@ -93,7 +93,7 @@ namespace K2Calendar.Controllers
                         throw new InvalidOperationException("Could not create UserInfoModel.", ex);
                     }
 
-                    //TODO: remove comment below when user's are allowed to register and not just admins
+                    //TODO: remove comment below when users are allowed to register and not just admins
                     //FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
                     
                     TempData["isSuccessRegister"] = true;
@@ -190,7 +190,7 @@ namespace K2Calendar.Controllers
         // POST: /Account/Admin/
         [Authorize(Roles = "Administrator,SuperAdmin")]
         [HttpPost]
-        //TODO: make user inactive
+        //TODO: allow admin make user inactive and delete, make admin button with dropdown actions
         public ActionResult Admin(AdminUserInfoModel model)
         {
             UserInfoModel userToUpdate = dbContext.Users.Find(model.UserInfoModel.Id);

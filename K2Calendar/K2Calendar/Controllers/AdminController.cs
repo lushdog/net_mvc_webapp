@@ -21,7 +21,7 @@ namespace K2Calendar.Controllers
         //}
 
         // GET: /Admin/Users/50
-        //TODO: sort by parameter
+        //TODO: sort by parameter ascending and descending, search for user
         public ActionResult Users(int pageNumber = 1)
         {
             List<UserInfoSummaryModel> userSummaries = new List<UserInfoSummaryModel>();
@@ -64,7 +64,7 @@ namespace K2Calendar.Controllers
                                 UserId = Convert.ToInt32(reader["Id"]),
                                 LastLogin = DateTime.Parse(reader["LastLoginDate"].ToString())                                
                             };
-                            //TODO: could optimize this block
+                            //TODO: optimize this block
                             userSummary.Roles = Roles.GetRolesForUser(userSummary.Username);
                             userSummaries.Add(userSummary);
                             ViewBag.TotalRows = Convert.ToInt32(reader["TotalRows"]);

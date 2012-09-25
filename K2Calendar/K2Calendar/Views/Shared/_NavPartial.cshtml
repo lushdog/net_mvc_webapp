@@ -14,6 +14,7 @@
                     <a class="brand" tabindex="-1" href="@Url.Action("Index", "Home")">K2 BJJ Portal</a>
                     @if (Request.IsAuthenticated)
                     {
+                        //TODO: changing rank doesn't take effect until session var is dropped by server, should work on next user login
                         var session = HttpContext.Current.Session;
                         if (session["rankimg"] == null || session["userid"] == null)
                         {

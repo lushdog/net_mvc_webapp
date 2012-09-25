@@ -17,7 +17,7 @@ namespace K2Calendar.Controllers
     {
         private AppDbContext dbContext = new AppDbContext();
 
-        //TODO: index
+        //TODO: index, show recent posts in a summary type format
         // GET: /Post/
         public ViewResult Index()
         {
@@ -78,6 +78,7 @@ namespace K2Calendar.Controllers
         }
 
         // POST: /Post/Edit/5
+        //TODO: enable setting IsActive flag, add admin panel dropdown button, shown when user is admin, allows deleting of post
         [HttpPost]
         [Authorize(Roles = "Administrator,SuperAdmin")]
         public ActionResult Edit(PostModel updatedModel)
@@ -85,7 +86,6 @@ namespace K2Calendar.Controllers
             if (ModelState.IsValid)
             {
                 PostModel originalModel = dbContext.Posts.Find(updatedModel.Id);
-                //TODO: enable setting IsActive flag
                 updatedModel.IsActive = originalModel.IsActive;
                 updatedModel.PostDate = originalModel.PostDate;
                 updatedModel.PosterId = originalModel.PosterId;
