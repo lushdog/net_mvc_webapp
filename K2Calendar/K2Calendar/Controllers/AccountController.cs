@@ -49,7 +49,7 @@ namespace K2Calendar.Controllers
         public ActionResult LogOff()
         {
             FormsAuthentication.SignOut();
-
+            Session.Clear();
             return RedirectToAction("Index", "Home");
         }
 
@@ -190,7 +190,6 @@ namespace K2Calendar.Controllers
         // POST: /Account/Admin/
         [Authorize(Roles = "Administrator,SuperAdmin")]
         [HttpPost]
-        //TODO: allow admin make user inactive and delete, make admin button with dropdown actions
         public ActionResult Admin(AdminUserInfoModel model)
         {
             UserInfoModel userToUpdate = dbContext.Users.Find(model.UserInfoModel.Id);
@@ -203,6 +202,11 @@ namespace K2Calendar.Controllers
                     MembershipUser membershipUserToUpdate = Membership.GetUser(userToUpdate.MembershipId);
                     Roles.RemoveUserFromRoles(membershipUserToUpdate.UserName, Roles.GetRolesForUser(membershipUserToUpdate.UserName));
                     Roles.AddUserToRole(membershipUserToUpdate.UserName, model.Role);
+                    if (model.UserInfoModel.IsActive == false)
+                    {
+                        membershipUserToUpdate.ResetPassword();
+                        //TODO: when a user is re-enabled (temp ban?), how do we get them their new pass?
+                    }
                     dbContext.Entry(userToUpdate).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
                     TempData["isSuccessAdmin"] = true;

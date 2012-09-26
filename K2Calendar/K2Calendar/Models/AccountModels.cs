@@ -117,7 +117,6 @@ namespace K2Calendar.Models
         [ForeignKey("RankId")]
         public RankModel Rank { get; set; }
 
-        [Display(Name = "IsActive")]
         public bool IsActive { get; set; }
 
     }

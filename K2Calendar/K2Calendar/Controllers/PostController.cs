@@ -27,9 +27,14 @@ namespace K2Calendar.Controllers
 
         // GET: /Post/Details/5
         [Authorize]
-        public ViewResult Details(int id)
+        public ActionResult Details(int id)
         {
            PostModel postmodel = dbContext.Posts.Include("Rank").Include("PostedBy").Single(p => p.Id == id);
+           if (postmodel.IsActive == false)
+           {
+               return Content("This post is no longer available");
+           }
+           
            ViewBag.ExistingTags = FormatExistingTags(postmodel);
            return View(postmodel);
         }
@@ -55,7 +60,8 @@ namespace K2Calendar.Controllers
                 postmodel.PostDate = DateTime.Now.ToUniversalTime();
                 postmodel.EventDate = postmodel.EventDate.ToUniversalTime();
                 postmodel.PosterId = AccountController.GetUserInfoFromMembershipUser(Membership.GetUser(), dbContext).Id;
-                
+                postmodel.IsActive = true;
+
                 dbContext.Posts.Add(postmodel);
                 dbContext.SaveChanges();
 
@@ -78,7 +84,6 @@ namespace K2Calendar.Controllers
         }
 
         // POST: /Post/Edit/5
-        //TODO: enable setting IsActive flag, add admin panel dropdown button, shown when user is admin, allows deleting of post
         [HttpPost]
         [Authorize(Roles = "Administrator,SuperAdmin")]
         public ActionResult Edit(PostModel updatedModel)
@@ -86,7 +91,6 @@ namespace K2Calendar.Controllers
             if (ModelState.IsValid)
             {
                 PostModel originalModel = dbContext.Posts.Find(updatedModel.Id);
-                updatedModel.IsActive = originalModel.IsActive;
                 updatedModel.PostDate = originalModel.PostDate;
                 updatedModel.PosterId = originalModel.PosterId;
                 updatedModel.Tags = new List<TagModel>();
@@ -123,25 +127,7 @@ namespace K2Calendar.Controllers
         }
 
         
-        //TODO: delete
-        // GET: /Post/Delete/5
-        public ActionResult Delete(int id)
-        {
-            PostModel postmodel = dbContext.Posts.Find(id);
-            return View(postmodel);
-        }
-
-        // POST: /Post/Delete/5
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
-        {            
-            PostModel postmodel = dbContext.Posts.Find(id);
-            dbContext.Posts.Remove(postmodel);
-            dbContext.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-
+       
         /// <summary>
         /// Processes TagsInput property of PostModel
         /// </summary>

@@ -45,7 +45,7 @@
             <div class="span4">
                 @Html.LabelFor(m => m.Email)
                 @Html.TextBoxFor(m => m.Email, new { disabled = "disabled" })
-            </div>
+            </div>            
         </div>
         <div class="row">
             <div class="span4 offset2">
@@ -62,6 +62,12 @@
             <div class="span4 offset2 @warning">
                 @Html.LabelFor(m => m.Role)
                 @Html.DropDownListFor(m => m.Role, (SelectList)ViewBag.RoleList)               
+            </div>
+            <div class="span4" style = "padding-top:30px">
+                <label class="checkbox">
+                    @Html.CheckBoxFor(m => m.UserInfoModel.IsActive) 
+                    Enabled
+                </label>
             </div>
         </div>
         

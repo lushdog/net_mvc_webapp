@@ -1,11 +1,14 @@
 ﻿@model K2Calendar.Models.PostModel
-
+    
 @Html.LabelFor(model => model.Title)
 @Html.TextBoxFor(model => model.Title, new { style = "width:320px;" })
 @Html.ValidationMessageFor(model => model.Title)
 @Html.LabelFor(model => model.Description)
 @Html.TextAreaFor(model => model.Description, new { rows = "10", style = "width:320px;" })
 @Html.ValidationMessageFor(model => model.Description)
+<label class="checkbox">
+    @Html.CheckBoxFor(model => model.IsActive) Visible
+</label>
 @Html.LabelFor(model => model.RankId, "Rank")
 @Html.DropDownListFor(m => m.RankId, (SelectList)ViewBag.RankList)
 @Html.LabelFor(model => model.EventDate)
