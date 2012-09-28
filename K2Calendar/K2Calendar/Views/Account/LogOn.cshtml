@@ -5,7 +5,7 @@
 }
 
 <div class="container">
-    <div class="row"><div class="span5 offset3">
+    <div class="row"><div class="span5 offset3 containerBackground">
     <h2>Log In</h2>
     <p>
         Please enter your user name and password. 
@@ -26,7 +26,7 @@
              bootstraps html formatting-->
              @ViewData.ModelMetadata.Properties.Where(p=>p.PropertyName=="RememberMe").SingleOrDefault().DisplayName
         </label>
-        <button type="submit" class="btn btn-primary btn-large">Log In &raquo;</button>
+        @CustomHtmlHelpers.SubmitButton("Log In")
         <br /><br />
         <small>
             <strong>

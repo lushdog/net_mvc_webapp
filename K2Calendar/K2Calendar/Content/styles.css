@@ -25,14 +25,21 @@ ul.token-input-list
     width:225px;
 }
 
-.postDetails, .sideBar
+.containerBackground, .sideBar
 {
     border:1px solid #D4D4D4;
-    padding:10px;
+    padding:10px 10px 10px 20px;
     background-color:#FAFAFA;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+}
+
+.partnerNavIcon
+{
+    width:25px;
+    height:25px;
+    padding-bottom:5px;
 }
 
 

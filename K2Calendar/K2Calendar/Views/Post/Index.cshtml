@@ -35,7 +35,7 @@
         <div class="span8">
         @foreach (var post in Model)
         {
-        <div class="span8 postDetails"> <!-- start body -->
+        <div class="span8 containerBackground"> <!-- start body -->
         <div class="container" id="@post.Id">
             <div class="row">
                 <div class="span8">
@@ -44,22 +44,18 @@
             </div>
             <div id="@post.YoutubeId">
                 <div class="row">
-                    <div class="span8" style="padding:10px 10px 10px 0px">
+                    <div class="span8" style="padding:0px 0px 10px 0px;">
                         <a href="@Url.Action("Details", new { id = post.Id })" class="thumb"></a>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="span8">
-                        <a href="@Url.Action("Details", new { id = post.Id })">Watch</a>
+                    <div class="span8" style="padding:0px 0px 10px 0px;">
+                        <a href="@Url.Action("Details", new { id = post.Id })" class="btn btn-info"><i class="icon-play icon-white"></i> Watch</a>
                             @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
                             {
-                            <a href="@Url.Action("Edit", new { id = post.Id })">Edit</a>
+                            <a href="@Url.Action("Edit", new { id = post.Id })" class="btn btn-danger"><i class="icon-edit icon-white"></i> Edit</a>
                             }
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span8">
-                        <div class="views"></div>
+                        <span class="views"></span>
                     </div>
                 </div>
                 <div class="row">
@@ -80,7 +76,7 @@
                 </div>
                 <div class="row">
                     <div class="span8">
-                        @K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(post, true, "facebook")
+                        @CustomHtmlHelpers.TagsListFor(post, true, "facebook")
                     </div>
                 </div>
             </div>

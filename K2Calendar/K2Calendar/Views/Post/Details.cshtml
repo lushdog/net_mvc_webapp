@@ -7,7 +7,7 @@
 <div class="container" id="PostDetails">
     <div class="row">
         <div class="span8">
-        <div class="span8 postDetails"> <!--Body content-->
+        <div class="span8 containerBackground"> <!--Body content-->
             <div class="row">
                 <div class="span8">
                     <h2>@Model.Title</h2>
@@ -23,17 +23,24 @@
                 <div class="span2">
                     @Html.ActionLink("Subscribe", "Subscribe")
                 </div>-->
+            <!-- TODO: flag as new, post since last login -->
+            <div class="row">
+                <div class="span8">
+                        <p>
+                        @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
+                        {
+                            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-danger"><i class="icon-edit icon-white"></i> Edit</a>
+                        }
+                        </p>
+                </div>
+            </div>
             <div class="row">
                 <div class="span8">
                     <p>
                         <img src="@Url.Content("~/Content/images/")@Model.Rank.Image" alt="@Model.Rank.Name" width="70px" height="70px" />
                         <small>
                             Posted by @Model.PostedBy.FirstName @Model.PostedBy.LastName and taught on @Model.EventDate.ToLocalTime().ToShortDateString()
-                        </small>
-                        @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
-                        {
-                            <a href="@Url.Action("Edit", new { id = Model.Id })">Edit</a>
-                        }
+                        </small>                        
                     </p>
                 </div>
             </div>
@@ -44,7 +51,7 @@
             </div>
             <div class="row">
                 <div class="span8">
-                    @K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(Model, true, "facebook")
+                    @CustomHtmlHelpers.TagsListFor(Model, true, "facebook")
                 </div>
             </div> 
         <!-- TODO: implement comments-->

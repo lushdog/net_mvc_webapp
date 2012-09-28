@@ -2,8 +2,8 @@
 @{
     ViewBag.Title = "Create Technique";
 }
-<div class="container">
-    <div class="row"><div class="span5 offset3">
+<div class="container containerBackground">
+    <div class="row"><div class="span5 offset3 containerBackground">
     <h2>
         Create a Technique</h2>
     <p>
@@ -18,8 +18,7 @@
         @Html.EditorForModel(Model)
 
         <p>
-            <button type="submit" class="btn btn-primary btn-large">
-                Create &raquo;</button>
+            @CustomHtmlHelpers.SubmitButton("Create")
         </p>
     }
     </div></div>

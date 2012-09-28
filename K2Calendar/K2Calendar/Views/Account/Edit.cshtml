@@ -2,7 +2,7 @@
 @{
     ViewBag.Title = "Update User";
 }
-<div class="container">
+<div class="container containerBackground">
     <h2>
         Update Account Details</h2>
     @if (TempData["isSuccessEdit"] != null)
@@ -45,13 +45,13 @@
         </div>
         
         @Html.EditorFor(m => Model.UserInfoModel)
+        
         <br />
         
         <div class="row">
             <div class="span4 offset2">
                 <p>
-                    <button type="submit" class="btn btn-primary btn-large">
-                        Update &raquo;</button>
+                    @CustomHtmlHelpers.SubmitButton("Update")
                 </p>
             </div>
         </div>

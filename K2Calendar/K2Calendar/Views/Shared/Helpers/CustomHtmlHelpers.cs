@@ -30,6 +30,12 @@ namespace K2Calendar.Views.Shared.Helpers
                     }});</script>", postModel.Id, "/Post/SearchTags", theme, isDisabled.ToString().ToLower(), existingTags));
         }
 
+        public static MvcHtmlString SubmitButton(string label)
+        {
+            return new MvcHtmlString(string.Format(@"<button type='submit' class='btn btn-primary btn-large'>
+                                                        {0} &raquo;</button>", label));
+        }
+
         /// <summary>
         /// Creates the pre-populated tags property for the JQuery TokenInput control used to render Tags for a Post
         /// </summary>
