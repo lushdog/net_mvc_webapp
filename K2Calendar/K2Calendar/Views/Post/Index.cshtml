@@ -50,6 +50,10 @@
                     <div class="row">
                         <div class="span8">
                             <a href="@Url.Action("Details", new { id = post.Id} )">Watch</a>
+                             @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
+                             {
+                                <a href="@Url.Action("Edit", new { id = post.Id })">Edit</a>
+                             }
                         </div>
                     </div>
                     <div class="row">
@@ -67,10 +71,6 @@
                             <script type="text/javascript" src="http://gdata.youtube.com/feeds/api/videos/@post.YoutubeId?v=2&amp;alt=json-in-script&callback=youtubeCallback" >
                             </script>
                         </div>
-                        <!-- TODO:implement view count
-                <div class = "span6 pull-right">
-                    123456789
-                </div>-->
                     </div>
                     <div class="row">
                         <div class="span8">

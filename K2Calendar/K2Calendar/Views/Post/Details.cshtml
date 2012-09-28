@@ -28,12 +28,12 @@
                         <small>
                             Posted by @Model.PostedBy.FirstName @Model.PostedBy.LastName and taught on @Model.EventDate.ToLocalTime().ToShortDateString()
                         </small>
+                        @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
+                        {
+                            <a href="@Url.Action("Edit", new { id = Model.Id })">Edit</a>
+                        }
                     </p>
                 </div>
-                <!-- TODO:implement view count
-                <div class = "span6 pull-right">
-                    123456789
-                </div>-->
             </div>
             <div class="row">
                 <div class="span8">
