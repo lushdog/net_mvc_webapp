@@ -32,61 +32,64 @@
 </script>
 <div class="container">
     <div class="row">
-        <div class="span8"> <!-- start body -->
+        <div class="span8">
         @foreach (var post in Model)
         {
-            <div class="container postDetails" id="@post.Id">
+        <div class="span8 postDetails"> <!-- start body -->
+        <div class="container" id="@post.Id">
+            <div class="row">
+                <div class="span8">
+                    <h3>@post.Title</h3>
+                </div>
+            </div>
+            <div id="@post.YoutubeId">
                 <div class="row">
-                    <div class="span8">
-                        <h3>@post.Title</h3>
+                    <div class="span8" style="padding:10px 10px 10px 0px">
+                        <a href="@Url.Action("Details", new { id = post.Id })" class="thumb"></a>
                     </div>
                 </div>
-                <div id="@post.YoutubeId">
-                    <div class="row">
-                        <div class="span8">
-                            <a href="@Url.Action("Details", new { id = post.Id} )" class="thumb"></a>
-                        </div>
+                <div class="row">
+                    <div class="span8">
+                        <a href="@Url.Action("Details", new { id = post.Id })">Watch</a>
+                            @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
+                            {
+                            <a href="@Url.Action("Edit", new { id = post.Id })">Edit</a>
+                            }
                     </div>
-                    <div class="row">
-                        <div class="span8">
-                            <a href="@Url.Action("Details", new { id = post.Id} )">Watch</a>
-                             @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
-                             {
-                                <a href="@Url.Action("Edit", new { id = post.Id })">Edit</a>
-                             }
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <div class="views"></div>
                     </div>
-                    <div class="row">
-                        <div class="span8">
-                            <div class="views"></div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <p>
+                            <img src="@Url.Content("~/Content/images/")@post.Rank.Image" alt="@post.Rank.Name" width="70px" height="70px" />
+                            <small>Posted by @post.PostedBy.FirstName @post.PostedBy.LastName and taught on @post.EventDate.ToLocalTime().ToShortDateString()
+                            </small>
+                        </p>
+                        <script type="text/javascript" src="http://gdata.youtube.com/feeds/api/videos/@post.YoutubeId?v=2&amp;alt=json-in-script&callback=youtubeCallback" >
+                        </script>
                     </div>
-                    <div class="row">
-                        <div class="span8">
-                            <p>
-                                <img src="@Url.Content("~/Content/images/")@post.Rank.Image" alt="@post.Rank.Name" width="70px" height="70px" />
-                                <small>Posted by @post.PostedBy.FirstName @post.PostedBy.LastName and taught on @post.EventDate.ToLocalTime().ToShortDateString()
-                                </small>
-                            </p>
-                            <script type="text/javascript" src="http://gdata.youtube.com/feeds/api/videos/@post.YoutubeId?v=2&amp;alt=json-in-script&callback=youtubeCallback" >
-                            </script>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        <p>@post.Description</p>
                     </div>
-                    <div class="row">
-                        <div class="span8">
-                            <p>@post.Description</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="span8">
-                            @K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(post, true, "facebook")
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                        @K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(post, true, "facebook")
                     </div>
                 </div>
             </div>
-        }
-        </div>              <!-- end body -->
-        <div class="span2 offset1"> <!-- start side -->
+        </div>
+        </div>                           <!-- end body -->
+        <div class = "row">&nbsp;</div>
+        }            
+        </div>
+        <div class="span2 offset1 sideBar"> <!-- start side -->
             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
             Ipsum has been the industry's standard dummy text ever since the 1500s, when an
             unknown printer took a galley of type and scrambled it to make a type specimen book.
