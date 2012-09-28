@@ -12,8 +12,9 @@
         var youtubeId = id.slice(id.indexOf(videoToken) + videoToken.length);
         var youtubeThumb = data.entry.media$group.media$thumbnail[thumbIndex];
         var numViews = data.entry.yt$statistics.viewCount;
-        $("#" + youtubeId + " .thumb").html('<img class="img-rounded" src="' + youtubeThumb.url + '" width="' + youtubeThumb.width + '" height="' + youtubeThumb.height + '" alt="' + youtubeThumb.yt$name + '"/>');
+        $("#" + youtubeId + " .thumb").html("<img class='img-rounded' src='" + youtubeThumb.url + "' width='" + youtubeThumb.width + "' height='" + youtubeThumb.height + "' alt='"+ youtubeThumb.yt$name + "' />");
         $("#" + youtubeId + " .views").html('<small>' + numViews + ' views</small>');
+       
         /*
         '<b>Title:</b> ' + data.entry.title.$t + '<br/>';
         '<b>Author:</b> ' + data.entry.author[0].name.$t + '<br/>';
@@ -40,12 +41,22 @@
                         <h3>@post.Title</h3>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="span8">
-                        <div id="@post.YoutubeId">
-                            <div class="thumb"></div>
+                <div id="@post.YoutubeId">
+                    <div class="row">
+                        <div class="span8">
+                            <a href="@Url.Action("Details", new { id = post.Id} )" class="thumb"></a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <a href="@Url.Action("Details", new { id = post.Id} )">Watch</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
                             <div class="views"></div>
                         </div>
+                    </div>
                     <div class="row">
                         <div class="span8">
                             <p>
@@ -71,7 +82,6 @@
                             @K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(post, true, "facebook")
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         }

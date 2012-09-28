@@ -14,7 +14,7 @@ namespace K2Calendar.Controllers
     {
         private AppDbContext dbContext = new AppDbContext();
         private const int PAGE_SIZE = 15;
-
+        private const int DESCRIPTION_SUMMARY_LENGTH = 400;
         //TODO: index, show recent posts in a summary type format (1)
         // GET: /Post/
         public ViewResult Index(int pageNumber = 1)
@@ -22,6 +22,14 @@ namespace K2Calendar.Controllers
             ViewBag.NumPages = Math.Ceiling((double)dbContext.Posts.Count() / PAGE_SIZE);
             ViewBag.PageNum = pageNumber;
             var posts = dbContext.Posts.Include(p => p.Rank).Include(p => p.PostedBy).OrderBy(p => p.Id).Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            foreach (PostModel post in posts)
+            {
+                if (post.Description.Length > DESCRIPTION_SUMMARY_LENGTH)
+                {
+                    var d = post.Description.Remove(DESCRIPTION_SUMMARY_LENGTH - 3);
+                    post.Description  = d + "...";
+                }
+            }
             return View(posts.ToList());
         }
 
