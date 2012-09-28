@@ -1,0 +1,87 @@
+﻿@model IEnumerable<K2Calendar.Models.UserInfoSummaryModel>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<div class="container">
+    <h2>Users</h2>
+    <div class="row">
+        <h4>
+            <span class="span3" style="border-bottom: 1px dashed #333;">
+                <!--@Html.ActionLink(ModelMetadata.FromLambdaExpression(m => m.FirstOrDefault().Username, Html.ViewData).DisplayName, "Users", new { sortBy = "username" })-->
+                @Html.LabelFor(m => m.FirstOrDefault().Username)
+            </span>
+        </h4>
+        <h4>
+            <span class="span3" style="border-bottom: 1px dashed #333;">
+                <!--@Html.ActionLink(ModelMetadata.FromLambdaExpression(m => m.FirstOrDefault().Email, Html.ViewData).DisplayName, "Users", new { sortBy = "username" })-->
+                @Html.LabelFor(m => m.FirstOrDefault().Email)
+            </span>
+        </h4>
+        <h4>
+            <span class="span3" style="border-bottom: 1px dashed #333;">
+                <!--@Html.ActionLink(ModelMetadata.FromLambdaExpression(m => m.FirstOrDefault().LastLogin, Html.ViewData).DisplayName, "Users", new { sortBy = "username" })-->
+                @Html.LabelFor(m => m.FirstOrDefault().LastLogin)
+            </span>
+       </h4>
+       <h4>
+            <span class="span3" style="border-bottom: 1px dashed #333;">
+                <!--@Html.ActionLink(ModelMetadata.FromLambdaExpression(m => m.FirstOrDefault().Roles, Html.ViewData).DisplayName, "Users", new { sortBy = "username" })-->
+                @Html.LabelFor(m => m.FirstOrDefault().Roles)
+            </span>
+        </h4>
+    </div>
+    @foreach (var user in Model)
+    {
+    <div class="row">
+        <span class="span3">
+            @Html.ActionLink(user.Username, "Admin", "Account", new {id = user.UserId}, null)
+        </span>
+        <span class="span3">
+            @user.Email
+        </span>
+        <span class="span3">
+            @user.LastLogin
+        </span>
+        <span class="span3">
+             @foreach (string role in user.Roles)
+             {
+                 @string.Format("{0} ", role);
+             }
+        </span>
+    </div>
+    }
+    <div class="pagination">
+      <ul>
+        @if (ViewBag.PageNum > 1)
+        {
+            <li>
+                @Html.ActionLink("Prev", "Users", new {pageNumber = ViewBag.PageNum - 1})
+            </li>
+        }
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            
+            if (ViewBag.PageNum == i)
+            {
+            <li class="disabled">
+                <span>@i</span>    
+            </li>
+            }
+            else
+            {
+            <li>
+                @Html.ActionLink(i.ToString(), "Users", new { pageNumber = i })    
+            </li>
+            }
+        }
+        @if (ViewBag.PageNum < ViewBag.TotalPages)
+        {
+            <li>
+                @Html.ActionLink("Next", "Users", new { pageNumber = ViewBag.PageNum + 1 })
+            </li>
+        }
+      </ul>
+    </div>
+</div>

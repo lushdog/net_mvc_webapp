@@ -127,6 +127,7 @@
     <Compile Include="Models\AppDbContext.cs" />
     <Compile Include="Models\PostModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\Shared\Helpers\CustomHtmlHelpers.cs" />
     <Content Include="Content\images\black.png" />
     <Content Include="Content\images\black_red.png" />
     <Content Include="Content\images\blue.png" />
@@ -225,9 +226,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Post\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Post\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\PostModel.cshtml" />

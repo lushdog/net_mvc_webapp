@@ -32,7 +32,7 @@ namespace K2Calendar.Controllers
                     }
                     else
                     {
-                       return RedirectToAction("Register", "Account");
+                       return RedirectToAction("Index", "Post");
                     }
                 }
                 else

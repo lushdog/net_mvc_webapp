@@ -11,10 +11,10 @@
                     <!--<img src="@Url.Content("~/Content/images/k2_logo.png")" class="img-rounded" width="40px" height="40px"  alt="RCJ Machado Jiu-Jitsu"/></a>
                     <img src="@Url.Content("~/Content/images/machado_logo.jpg")" class="img-circle" width="40px" height="40px" alt="K2 Martial Arts"/></a>-->
                   
-                    <a class="brand" tabindex="-1" href="@Url.Action("Index", "Home")">K2 BJJ Portal</a>
+                    <a class="brand" tabindex="-1" href="@Url.Action("Index", "Home")">K2 BJJ Portal <span class="label label-important" style="margin-top:0px;" >Beta</span></a>
                     @if (Request.IsAuthenticated)
                     {
-                        //TODO: changing rank doesn't take effect until session var is dropped by server, should work on next user login
+                        //TODO: use cookie instead?
                         var session = HttpContext.Current.Session;
                         if (session["rankimg"] == null || session["userid"] == null)
                         {
@@ -27,8 +27,8 @@
                     
                         <ul class="nav">
                             <li class="active"><a href="@Url.Action("Index", "Home")" tabindex="-1">Home</a> </li>
-                            <li><a href="@Url.Action("Post", "List")" tabindex="-1">Browse</a> </li>
-                            <li><a href="@Url.Action("Post", "Search")" tabindex="-1">Search</a> </li>
+                            <li><a href="@Url.Action("Index", "Post")" tabindex="-1">Browse</a> </li>
+                            <li><a href="#" tabindex="-1"><!--<a href="@Url.Action("Post", "Search")" tabindex="-1">-->Search</a> </li>
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" tabindex="-1">Partners <b class="caret"></b>
                                </a>
@@ -79,7 +79,7 @@
                         </ul>
                                 
                         <form action="@Url.Action("Search", "Post")" method="post" class="navbar-search pull-right">
-                            <input type="text" class="search-query" name="Query" id="Query" placeholder="Search"  tabindex="-1">
+                            <input type="text" class="search-query" name="Query" id="Query" placeholder="Coming Soon!"  tabindex="-1">
                         </form>
                     }
                     else

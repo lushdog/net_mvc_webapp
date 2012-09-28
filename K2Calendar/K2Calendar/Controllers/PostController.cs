@@ -1,41 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using K2Calendar.Models;
-using System.Web.Script.Serialization;
-using System.Text;
-using System.Web.Security;
 using System.Diagnostics;
+using System.Linq;
+using System.Web.Mvc;
+using System.Web.Script.Serialization;
+using System.Web.Security;
+using K2Calendar.Models;
 
 namespace K2Calendar.Controllers
 { 
     public class PostController : Controller
     {
         private AppDbContext dbContext = new AppDbContext();
+        private const int PAGE_SIZE = 15;
 
-        //TODO: index, show recent posts in a summary type format
+        //TODO: index, show recent posts in a summary type format (1)
         // GET: /Post/
-        public ViewResult Index()
+        public ViewResult Index(int pageNumber = 1)
         {
-            var posts = dbContext.Posts.Include(p => p.Rank);
+            ViewBag.NumPages = Math.Ceiling((double)dbContext.Posts.Count() / PAGE_SIZE);
+            ViewBag.PageNum = pageNumber;
+            var posts = dbContext.Posts.Include(p => p.Rank).Include(p => p.PostedBy).OrderBy(p => p.Id).Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
             return View(posts.ToList());
         }
 
+        //TODO: implement SEARCH post and get controller actions
+
         // GET: /Post/Details/5
+        //TODO: make this look pretty (2)
         [Authorize]
         public ActionResult Details(int id)
         {
-           PostModel postmodel = dbContext.Posts.Include("Rank").Include("PostedBy").Single(p => p.Id == id);
+           PostModel postmodel = dbContext.Posts.Include(p => p.Rank).Include(p => p.PostedBy).Single(p => p.Id == id);
            if (postmodel.IsActive == false)
            {
                return Content("This post is no longer available");
            }
-           
-           ViewBag.ExistingTags = FormatExistingTags(postmodel);
            return View(postmodel);
         }
 
@@ -69,7 +70,6 @@ namespace K2Calendar.Controllers
             }
 
             AccountController.GenerateRanksList(dbContext, ViewBag);
-            ViewBag.ExistingTags = FormatExistingTags(postmodel);
             return View(postmodel);
         }
 
@@ -79,7 +79,6 @@ namespace K2Calendar.Controllers
         {
             PostModel postmodel = dbContext.Posts.Find(id);
             AccountController.GenerateRanksList(dbContext, ViewBag);
-            ViewBag.ExistingTags = FormatExistingTags(postmodel);
             return View(postmodel);
         }
 
@@ -122,7 +121,6 @@ namespace K2Calendar.Controllers
                 return RedirectToAction("Details", new { id = updatedModel.Id }); 
             }
             AccountController.GenerateRanksList(dbContext, ViewBag);
-            ViewBag.ExistingTags = FormatExistingTags(updatedModel);
             return View(updatedModel);
         }
 
@@ -179,27 +177,6 @@ namespace K2Calendar.Controllers
 	        }
             JavaScriptSerializer serializer = new JavaScriptSerializer();
             return serializer.Serialize(tags);
-        }
-
-        /// <summary>
-        /// Creates the pre-populated tags property for the JQuery TokenInput control used to render Tags for a Post
-        /// </summary>
-        public string FormatExistingTags(PostModel model)
-        {
-            string existingTags = "";
-            if (model.Tags != null || model.Tags.Count > 0)
-            {
-                System.Text.StringBuilder prePopulate = new System.Text.StringBuilder("prePopulate: [ \n");
-                foreach (var tag in model.Tags)
-                {
-                    string tagString = string.Format(@"{{id:{0}, name:""{1}""}},", tag.Id, tag.Name);
-                    prePopulate.Append(tagString);
-                }
-                prePopulate.Remove(prePopulate.Length - 1, 1); //remove trailing comma
-                prePopulate.Append("]");
-                existingTags = prePopulate.ToString();
-            }
-            return existingTags;
         }
 
         protected override void Dispose(bool disposing)

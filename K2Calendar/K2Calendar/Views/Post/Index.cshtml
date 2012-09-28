@@ -1,63 +1,102 @@
 ﻿@model IEnumerable<K2Calendar.Models.PostModel>
-
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Techniques";
 }
+<script src="@Url.Content("~/Scripts/jquery.tokeninput.js")" type="text/javascript"></script>
+<script type="text/javascript">
 
-<h2>Index</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
-    <tr>
-        <th>
-            IsActive
-        </th>
-        <th>
-            Title
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Rank
-        </th>
-        <th>
-            Date
-        </th>
-        <th>
-            VideoUrl
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActive)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Rank.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.VideoUrl)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
-</table>
+    function youtubeCallback(data) {
+        var videoToken = "video:"
+        var thumbIndex = 1;
+        var id = data.entry.id.$t.toString();
+        var youtubeId = id.slice(id.indexOf(videoToken) + videoToken.length);
+        var youtubeThumb = data.entry.media$group.media$thumbnail[thumbIndex];
+        $("#" + youtubeId).html('<img class="img-rounded" src="' + youtubeThumb.url + '" width="' + youtubeThumb.width + '" height="' + youtubeThumb.height + '" alt="' + youtubeThumb.yt$name + '"/>');
+        
+        /*
+        '<b>Title:</b> ' + data.entry.title.$t + '<br/>';
+        '<b>Author:</b> ' + data.entry.author[0].name.$t + '<br/>';
+        '<b>Published:</b> ' + new Date(data.entry.published.$t).toLocaleDateString() + '<br/>';
+        '<b>Duration:</b> ' + Math.floor(data.entry.media$group.yt$duration.seconds / 60) + ':' + (data.entry.media$group.yt$duration.seconds % 60) + ' (' + data.entry.media$group.yt$duration.seconds + ' seconds)<br/>';
+        if (data.entry.gd$rating) {
+            '<b>Rating:</b> ' + data.entry.gd$rating.average.toFixed(1) + ' out of ' + data.entry.gd$rating.max + ' (' + data.entry.gd$rating.numRaters + ' ratings)<br/>';
+        }
+        '<b>Statistics:</b> ' + data.entry.yt$statistics.favoriteCount + ' favorite(s); ' + data.entry.yt$statistics.viewCount + ' view(s)<br/>';
+        '<br/>' + data.entry.media$group.media$description.$t.replace(/\n/g, '<br/>') + '<br/>';
+        '<br/><a href="' + data.entry.media$group.media$player.url + '" target="_blank">Watch on YouTube</a>';
+        //alert(s);
+        */
+    }
+</script>
+<div class="container">
+    <div class="row">
+        <div class="span8"> <!-- start body -->
+        @foreach (var post in Model)
+        {
+            <div class="container postDetails" id="@post.Id">
+                <div class="row">
+                    <div class="span8">
+                        <h3>@post.Title</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
+                    <div class="row">
+                        <div class="span8" id="@post.YoutubeId">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <p>
+                                <img src="@Url.Content("~/Content/images/")@post.Rank.Image" alt="@post.Rank.Name" width="70px" height="70px" />
+                                <small>Posted by @post.PostedBy.FirstName @post.PostedBy.LastName and taught on @post.EventDate.ToLocalTime().ToShortDateString()
+                                </small>
+                            </p>
+                            <script type="text/javascript" src="http://gdata.youtube.com/feeds/api/videos/@post.YoutubeId?v=2&amp;alt=json-in-script&callback=youtubeCallback" >
+                            </script>
+                        </div>
+                        <!-- TODO:implement view count
+                <div class = "span6 pull-right">
+                    123456789
+                </div>-->
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            <p>@post.Description</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="span8">
+                            @K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(post, true, "facebook")
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        }
+        </div>              <!-- end body -->
+        <div class="span2 offset1"> <!-- start side -->
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+            Ipsum has been the industry's standard dummy text ever since the 1500s, when an
+            unknown printer took a galley of type and scrambled it to make a type specimen book.
+            It has survived not only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s with the release
+            of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop
+            publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        </div>              <!-- end side -->
+    </div>
+</div>
+<ul class="pager">
+    @if (ViewBag.PageNum > 1)
+    {
+        <li>
+            @Html.ActionLink("Previous", "Details", new { pageNumber = ViewBag.PageNum - 1 })
+        </li>
+    }
+    @if (ViewBag.PageNum < ViewBag.NumPages)
+    {
+        <li>
+            @Html.ActionLink("Next", "Details", new { pageNumber = ViewBag.PageNum + 1 })
+        </li>
+    }
+</ul>

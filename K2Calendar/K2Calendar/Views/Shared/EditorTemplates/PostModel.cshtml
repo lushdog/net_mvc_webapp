@@ -19,18 +19,6 @@
 @Html.ValidationMessageFor(model => model.YoutubeId)
 @Html.LabelFor(model => model.Tags)
 @Html.ValidationMessageFor(model => model.TagsInput)
-<input data-val="true" data-val-required="The Tags field is required." type="text" id="TagsInput" name="TagsInput" />
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#TagsInput").tokenInput("/Post/SearchTags", {
-            allowFreeTagging: true,
-            preventDuplicates: true,
-            hintText: "e.g. 'armbar' 'back mount' 'Barrhaven' ...",
-            noResultsText: "Nothing found. Press <Enter> to add this new tag.",
-            searchingText: "Searching...",
-            @Html.Raw(ViewBag.ExistingTags)          
-        });
-    });
-</script>
+@K2Calendar.Views.Shared.Helpers.CustomHtmlHelpers.TagsListFor(Model, false, "")
 <br />
 <br />
