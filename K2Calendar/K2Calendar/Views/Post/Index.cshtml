@@ -11,8 +11,9 @@
         var id = data.entry.id.$t.toString();
         var youtubeId = id.slice(id.indexOf(videoToken) + videoToken.length);
         var youtubeThumb = data.entry.media$group.media$thumbnail[thumbIndex];
-        $("#" + youtubeId).html('<img class="img-rounded" src="' + youtubeThumb.url + '" width="' + youtubeThumb.width + '" height="' + youtubeThumb.height + '" alt="' + youtubeThumb.yt$name + '"/>');
-        
+        var numViews = data.entry.yt$statistics.viewCount;
+        $("#" + youtubeId + " .thumb").html('<img class="img-rounded" src="' + youtubeThumb.url + '" width="' + youtubeThumb.width + '" height="' + youtubeThumb.height + '" alt="' + youtubeThumb.yt$name + '"/>');
+        $("#" + youtubeId + " .views").html('<small>' + numViews + ' views</small>');
         /*
         '<b>Title:</b> ' + data.entry.title.$t + '<br/>';
         '<b>Author:</b> ' + data.entry.author[0].name.$t + '<br/>';
@@ -41,10 +42,10 @@
                 </div>
                 <div class="row">
                     <div class="span8">
-                    <div class="row">
-                        <div class="span8" id="@post.YoutubeId">
+                        <div id="@post.YoutubeId">
+                            <div class="thumb"></div>
+                            <div class="views"></div>
                         </div>
-                    </div>
                     <div class="row">
                         <div class="span8">
                             <p>
