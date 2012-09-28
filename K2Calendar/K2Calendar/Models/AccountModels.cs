@@ -72,6 +72,11 @@ namespace K2Calendar.Models
 
         [Required]
         [DataType(DataType.Text)]
+        [Display(Name = "City")]
+        public string City { get; set; }
+
+        [Required]
+        [DataType(DataType.Text)]
         [Display(Name = "State")]
         public string State { get; set; }
 
