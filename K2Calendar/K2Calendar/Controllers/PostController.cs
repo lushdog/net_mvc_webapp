@@ -157,7 +157,7 @@ namespace K2Calendar.Controllers
                 {
                     tagForPost = new TagModel { Name = tagOrId, IsActive = true };
                     dbContext.Tags.Add(tagForPost);
-                    dbContext.SaveChanges();
+                    //dbContext.SaveChanges();
                 }
 
                 if (tagForPost != null)
@@ -174,9 +174,9 @@ namespace K2Calendar.Controllers
         /// <returns></returns>
         public string SearchTags(string q)
         {
-            var query = from cat in dbContext.Tags
-                        where cat.Name.Contains(q)
-                        select cat;
+            var query = from tag in dbContext.Tags
+                        where tag.Name.Contains(q)
+                        select tag;
 
             List<TagHolderForJson> tags = new List<TagHolderForJson>();
             foreach (TagModel model in query)
