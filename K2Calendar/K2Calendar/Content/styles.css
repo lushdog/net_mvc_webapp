@@ -23,7 +23,16 @@
 ul.token-input-list
 {
     width:225px;
+}
+
+ul.token-input-list-facebook
+{
     background-color: transparent;
+}
+
+ul.token-input-list-facebook li input 
+{
+    background-color: inherit;
 }
 
 .containerBackground, .sideBar
