@@ -1,12 +1,15 @@
 ﻿@model K2Calendar.Models.PostModel
-    
+@{
+    var description = (Model != null) ? Model.Description : "";
+}
+
 @Html.LabelFor(model => model.Title)
 @Html.TextBoxFor(model => model.Title, new { style = "width:320px;" })
 @Html.ValidationMessageFor(model => model.Title)
 @Html.LabelFor(model => model.Description)
-@CustomHtmlHelpers.HtmlEnabledTextAreaFor("Description", Model.Description)
+@CustomHtmlHelpers.HtmlEnabledTextAreaFor("Description", description)
 @Html.ValidationMessageFor(model => model.Description)
-<label class="checkbox">
+<label class="checkbox"> <!-- TODO: this is ignored on Create -->
     @Html.CheckBoxFor(model => model.IsActive) Visible
 </label>
 @Html.LabelFor(model => model.RankId, "Rank")

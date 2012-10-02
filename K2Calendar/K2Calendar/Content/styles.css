@@ -23,6 +23,7 @@
 ul.token-input-list
 {
     width:225px;
+    background-color: transparent;
 }
 
 .containerBackground, .sideBar
