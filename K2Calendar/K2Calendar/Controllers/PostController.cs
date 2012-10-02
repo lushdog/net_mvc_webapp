@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using System.Web.Script.Serialization;
 using System.Web.Security;
 using K2Calendar.Models;
+using Microsoft.Security.Application;
 
 namespace K2Calendar.Controllers
 { 
@@ -22,7 +23,7 @@ namespace K2Calendar.Controllers
         {
             ViewBag.NumPages = Math.Ceiling((double)dbContext.Posts.Count() / PAGE_SIZE);
             ViewBag.PageNum = pageNumber;
-            var posts = dbContext.Posts.Include(p => p.Rank).Include(p => p.PostedBy).Where(p => p.IsActive == true).OrderBy(p => p.Id).Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
+            var posts = dbContext.Posts.Include(p => p.Rank).Include(p => p.PostedBy).Where(p => p.IsActive == true).OrderByDescending(p => p.Id).Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
             foreach (PostModel post in posts)
             {
                 if (post.Description.Length > DESCRIPTION_SUMMARY_LENGTH)
@@ -70,7 +71,7 @@ namespace K2Calendar.Controllers
                 postmodel.EventDate = postmodel.EventDate.ToUniversalTime();
                 postmodel.PosterId = AccountController.GetUserInfoFromMembershipUser(Membership.GetUser(), dbContext).Id;
                 postmodel.IsActive = true;
-
+                postmodel.Description = Encoder.HtmlEncode(postmodel.Description);
                 dbContext.Posts.Add(postmodel);
                 dbContext.SaveChanges();
 
@@ -100,6 +101,7 @@ namespace K2Calendar.Controllers
                 PostModel originalModel = dbContext.Posts.Find(updatedModel.Id);
                 updatedModel.PostDate = originalModel.PostDate;
                 updatedModel.PosterId = originalModel.PosterId;
+                updatedModel.Description = Encoder.HtmlEncode(updatedModel.Description);
                 updatedModel.Tags = new List<TagModel>();
                 ProcessTags(updatedModel);
                 

@@ -5,6 +5,7 @@ using System.Web;
 using K2Calendar.Models;
 using System.Web.Mvc;
 using System.Security.Policy;
+using System.Text;
 
 namespace K2Calendar.Views.Shared.Helpers
 {
@@ -13,6 +14,7 @@ namespace K2Calendar.Views.Shared.Helpers
         public static MvcHtmlString TagsListFor(PostModel postModel, bool isDisabled, string theme)
         {
             string existingTags = FormatExistingTags(postModel);
+            int inputId = (postModel != null) ? postModel.Id : 1; 
             return new MvcHtmlString(string.Format(@"<strong><small>Tags:</small></strong>
                             <input type='text' id='TagsInput{0}' name='TagsInput' />
                             <script type='text/javascript'>
@@ -27,7 +29,7 @@ namespace K2Calendar.Views.Shared.Helpers
                             disabled: {3},   
                             {4}     
                         }});
-                    }});</script>", postModel.Id, "/Post/SearchTags", theme, isDisabled.ToString().ToLower(), existingTags));
+                    }});</script>", inputId, "/Post/SearchTags", theme, isDisabled.ToString().ToLower(), existingTags));
         }
 
         public static MvcHtmlString SubmitButton(string label)
@@ -41,20 +43,18 @@ namespace K2Calendar.Views.Shared.Helpers
         /// </summary>
         private static string FormatExistingTags(PostModel model)
         {
-            string existingTags = "";
-            if (model.Tags != null || model.Tags.Count > 0)
+            StringBuilder prePopulate = new StringBuilder("prePopulate: [ \n");
+            if (model != null && model.Tags != null && model.Tags.Count > 0)
             {
-                System.Text.StringBuilder prePopulate = new System.Text.StringBuilder("prePopulate: [ \n");
                 foreach (var tag in model.Tags)
                 {
                     string tagString = string.Format(@"{{id:{0}, name:""{1}""}},", tag.Id, tag.Name);
                     prePopulate.Append(tagString);
                 }
-                prePopulate.Remove(prePopulate.Length - 1, 1); //remove trailing comma
-                prePopulate.Append("]");
-                existingTags = prePopulate.ToString();
+                prePopulate.Remove(prePopulate.Length - 1, 1); //remove trailing comma                
             }
-            return existingTags;
+            prePopulate.Append("]");
+            return prePopulate.ToString();
         }
 
     }
