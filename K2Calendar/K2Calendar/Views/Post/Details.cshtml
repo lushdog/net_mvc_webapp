@@ -46,7 +46,7 @@
             </div>
             <div class="row">
                 <div class="span8">
-                    <p>@Html.Raw(Model.Description)</p>
+                    <p>@Html.Raw(HttpUtility.HtmlDecode(Model.Description))</p>
                 </div>
             </div>
             <div class="row">

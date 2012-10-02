@@ -11,31 +11,38 @@ namespace K2Calendar.Views.Shared.Helpers
 {
     public class CustomHtmlHelpers
     {
+        //TODO: enable no X button for read-only
         public static MvcHtmlString TagsListFor(PostModel postModel, bool isDisabled, string theme)
         {
             string existingTags = FormatExistingTags(postModel);
-            int inputId = (postModel != null) ? postModel.Id : 1; 
-            return new MvcHtmlString(string.Format(@"<strong><small>Tags:</small></strong>
+            int inputId = (postModel != null) ? postModel.Id : 1;
+            string closeChar = (isDisabled) ? "" : "x";
+            return new MvcHtmlString(string.Format(@"
                             <input type='text' id='TagsInput{0}' name='TagsInput' />
                             <script type='text/javascript'>
                     $(document).ready(function () {{
                         $('#TagsInput{0}').tokenInput('{1}', {{
                             theme: '{2}',
+                            deleteText: '{3}',
                             allowFreeTagging: true,
                             preventDuplicates: true,
-                            hintText: ""e.g. 'armbar' 'back mount' 'Barrhaven' ..."",
+                            hintText: ""e.g. 'Armbar' 'BackMount' 'Barrhaven' ..."",
                             noResultsText: 'Nothing found. Press <Enter> to add this new tag.',
                             searchingText: 'Searching...',
-                            disabled: {3},   
-                            {4}     
+                            disabled: {4},   
+                            {5}    
                         }});
-                    }});</script>", inputId, "/Post/SearchTags", theme, isDisabled.ToString().ToLower(), existingTags));
+                    }});</script>", inputId, "/Post/SearchTags", theme, closeChar, isDisabled.ToString().ToLower(), existingTags));
         }
 
         public static MvcHtmlString SubmitButton(string label)
         {
-            return new MvcHtmlString(string.Format(@"<button type='submit' class='btn btn-primary btn-large'>
-                                                        {0} &raquo;</button>", label));
+            return new MvcHtmlString(string.Format(@"<button type='submit' class='btn btn-primary btn-large'>{0} &raquo;</button>", label));
+        }
+
+        public static HtmlString HtmlEnabledTextAreaFor(string id, string text)
+        {
+            return new HtmlString(string.Format(@"<textarea cols='20' id='{0}' name='{0}' rows='10' style='width:320px'>{1}</textarea>", id, HttpUtility.HtmlDecode(text)));
         }
 
         /// <summary>
