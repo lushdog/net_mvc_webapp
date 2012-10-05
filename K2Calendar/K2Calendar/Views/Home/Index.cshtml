@@ -5,7 +5,9 @@
 <div class="container">
     <img src="@Url.Content("~/Content/images/k2_logo.png")" class="img-rounded" alt="RCJ Machado Jiu-Jitsu"/>
     <img src="@Url.Content("~/Content/images/machado_logo.jpg")" class="img-circle" alt="K2 Martial Arts"/>
-    <div class="hero-unit">
+    <!--TODO: currently these two divs are almost same, if they don't change in future
+    we could just do switch out class dynamically rather than using responsive stuff from Bootstrap-->
+    <div class="hero-unit hidden-phone">
         <div>
             <h1>K2 Brazilian Jiu Jitsu Portal</h1>
             <br />
@@ -16,7 +18,33 @@
                 <li>Become a better BJJ player</li>           
             </ul>
             <br />
-            <p><a href="@Url.Action("Logon", "Account")" class="btn btn-primary btn-large">Log In &raquo;</a></p>
+            @if (!Request.IsAuthenticated)
+            {
+                <p><a href="@Url.Action("Logon", "Account")" class="btn btn-primary btn-large">Log In &raquo;</a></p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Index", "Post")" class="btn btn-primary btn-large">Learn &raquo;</a></p>
+            }
+        </div>
+    </div>
+    <div class="containerBackground visible-phone">
+        <div>
+            <h3>K2 Brazilian Jiu Jitsu Portal</h3>
+            <ul>
+                <li>Review techniques learned in class by watching instructional videos</li>  
+                <li>Discuss these techniques with your fellow class members</li>        
+                <li>Find techniques by date or by technique category</li> 
+                <li>Become a better BJJ player</li>           
+            </ul>
+            @if (!Request.IsAuthenticated)
+            {
+                <p><a href="@Url.Action("Logon", "Account")" class="btn btn-primary btn-large">Log In &raquo;</a></p>
+            }
+            else
+            {
+                <p><a href="@Url.Action("Index", "Post")" class="btn btn-primary btn-large">Learn &raquo;</a></p>
+            }     
         </div>
     </div>
     <div>
