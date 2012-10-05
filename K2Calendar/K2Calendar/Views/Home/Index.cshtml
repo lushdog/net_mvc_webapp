@@ -1,6 +1,17 @@
 ﻿@{
     ViewBag.Title = "K2 BJJ";
 }
+ <script type="text/javascript">
+     var addToHomeConfig = {
+         animationIn: 'bubble',
+         animationOut: 'drop',
+         lifespan: 10000,
+         expire: 2,
+         touchIcon: true,
+         message: 'K2 BJJ Portal is mobile friendly! Please add this site to your iOS home screen so you can learn on the bus.'
+     };
+</script>
+<script type="text/javascript" src="@Url.Content("~/Content/add2home.js")"></script>  
 
 <div class="container">
     <img src="@Url.Content("~/Content/images/k2_logo.png")" class="img-rounded" alt="RCJ Machado Jiu-Jitsu"/>
