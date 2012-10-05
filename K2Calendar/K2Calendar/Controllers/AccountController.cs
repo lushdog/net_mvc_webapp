@@ -18,6 +18,7 @@ namespace K2Calendar.Controllers
 
         // POST: /Account/LogOn
         [HttpPost]
+        //[RequireHttps] TODO:once we have domain get Cert http://msdn.microsoft.com/en-us/library/windowsazure/ff795779.aspx
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             if (ModelState.IsValid)

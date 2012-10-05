@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="span8">
                         <p>
-                        @if (User.IsInRole("Adminisrator") || User.IsInRole("SuperAdmin"))
+                        @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
                         {
                             <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-danger"><i class="icon-edit icon-white"></i> Edit</a>
                         }

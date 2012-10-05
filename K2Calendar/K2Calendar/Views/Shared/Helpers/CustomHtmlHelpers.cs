@@ -11,7 +11,6 @@ namespace K2Calendar.Views.Shared.Helpers
 {
     public class CustomHtmlHelpers
     {
-        //TODO: enable no X button for read-only
         public static MvcHtmlString TagsListFor(PostModel postModel, bool isDisabled, string theme)
         {
             string existingTags = FormatExistingTags(postModel);
