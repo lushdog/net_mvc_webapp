@@ -4,60 +4,63 @@
 }
 <!-- TODO: refactor this block and the same block in Index.cshtml into partial, pass list of 1 for this guy -->
 <script src="@Url.Content("~/Scripts/jquery.tokeninput.js")" type="text/javascript"></script>
-<div class="container" id="PostDetails">
+<div class="container">
     <div class="row">
         <div class="span8">
-        <div class="span8 containerBackground"> <!--Body content-->
-            <div class="row">
-                <div class="span8">
-                    <h2>@Model.Title</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="span8" style="padding-bottom:10px;">
-                    <div class="embed-container">
-                        <iframe src="http://www.youtube.com/embed/@Model.YoutubeId?rel=0" frameborder="0" allowfullscreen>
-                        </iframe>
+            <div class="span8 containerBackground"> <!--Body content-->
+                <div class="container">
+                <div class="row">
+                    <div class="span8">
+                        <h2>@Model.Title</h2>
                     </div>
                 </div>
-            </div>
-            <!--TODO: support subcriptions
-                <div class="span2">
-                    @Html.ActionLink("Subscribe", "Subscribe")
-                </div>-->
-            <!-- TODO: flag as new, post since last login -->
-            <div class="row">
-                <div class="span8">
+                <div class="row">
+                    <div class="span8" style="padding-bottom:10px;">
+                        <div class="embed-container">
+                            <iframe src="http://www.youtube.com/embed/@Model.YoutubeId?rel=0" frameborder="0" allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+                <!--TODO: support subcriptions
+                    <div class="span2">
+                        @Html.ActionLink("Subscribe", "Subscribe")
+                    </div>-->
+                <!-- TODO: flag as new, post since last login -->
+                <div class="row">
+                    <div class="span8">
+                            <p>
+                            @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
+                            {
+                                <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-danger"><i class="icon-edit icon-white"></i> Edit</a>
+                            }
+                            </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span8">
                         <p>
-                        @if (User.IsInRole("Administrator") || User.IsInRole("SuperAdmin"))
-                        {
-                            <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-danger"><i class="icon-edit icon-white"></i> Edit</a>
-                        }
+                            <img src="@Url.Content("~/Content/images/")@Model.Rank.Image" alt="@Model.Rank.Name" width="70px" height="70px" />
+                            <small>
+                                Posted by @Model.PostedBy.FirstName @Model.PostedBy.LastName and taught on @Model.EventDate.ToLocalTime().ToShortDateString()
+                            </small>                        
                         </p>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="span8">
-                    <p>
-                        <img src="@Url.Content("~/Content/images/")@Model.Rank.Image" alt="@Model.Rank.Name" width="70px" height="70px" />
-                        <small>
-                            Posted by @Model.PostedBy.FirstName @Model.PostedBy.LastName and taught on @Model.EventDate.ToLocalTime().ToShortDateString()
-                        </small>                        
-                    </p>
+                <div class="row">
+                    <div class="span8">
+                        <p>@Html.Raw(HttpUtility.HtmlDecode(Model.Description))</p>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="span8">
-                    <p>@Html.Raw(HttpUtility.HtmlDecode(Model.Description))</p>
+                <div class="row">
+                    <div class="span8">
+                        @CustomHtmlHelpers.TagsListFor(Model, true, "facebook")
+                    </div>
+                </div> 
+                <!-- TODO: implement comments-->
                 </div>
-            </div>
-            <div class="row">
-                <div class="span8">
-                    @CustomHtmlHelpers.TagsListFor(Model, true, "facebook")
-                </div>
-            </div> 
-        <!-- TODO: implement comments-->
-        </div> <!-- End of Body content-->
+            </div> <!-- End of Body content-->
+            <div class = "row">&nbsp;</div>
         </div>
         <div class="span2 offset1 sideBar"> <!--Sidebar content-->
             <!--TODO: implement related videos-->

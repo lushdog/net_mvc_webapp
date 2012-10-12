@@ -4,7 +4,7 @@
 }
 
 @Html.LabelFor(model => model.Title)
-@Html.TextBoxFor(model => model.Title, new { style = "width:320px;" })
+@Html.TextBoxFor(model => model.Title, new { style = "width:80%;" })
 @Html.ValidationMessageFor(model => model.Title)
 @Html.LabelFor(model => model.Description)
 @CustomHtmlHelpers.HtmlEnabledTextAreaFor("Description", description)

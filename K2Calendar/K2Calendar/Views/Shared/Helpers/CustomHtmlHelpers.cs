@@ -41,7 +41,7 @@ namespace K2Calendar.Views.Shared.Helpers
 
         public static HtmlString HtmlEnabledTextAreaFor(string id, string text)
         {
-            return new HtmlString(string.Format(@"<textarea cols='20' id='{0}' name='{0}' rows='10' style='width:320px'>{1}</textarea>", id, HttpUtility.HtmlDecode(text)));
+            return new HtmlString(string.Format(@"<textarea cols='20' id='{0}' name='{0}' rows='10' style='width:80%'>{1}</textarea>", id, HttpUtility.HtmlDecode(text)));
         }
 
         /// <summary>
