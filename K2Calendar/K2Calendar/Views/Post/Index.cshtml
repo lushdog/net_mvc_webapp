@@ -14,7 +14,7 @@
         var numViews = 0;
         var stats = data.entry.yt$statistics;
         if (stats != undefined)  {                       //seems that stats can be null if disabled?
-            stats = data.entry.yt$statistics.viewCount;
+            numViews = data.entry.yt$statistics.viewCount;
         }
         $("#" + youtubeId + " .thumb").html("<img class='img-rounded' src='" + youtubeThumb.url + "' width='" + youtubeThumb.width + "' height='" + youtubeThumb.height + "' alt='"+ youtubeThumb.yt$name + "' />");
         $("#" + youtubeId + " .views").html('<small>' + numViews + ' views</small>');
