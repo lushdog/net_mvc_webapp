@@ -261,6 +261,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Properties\PublishProfiles\k2bjj - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\k2bjj - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\K2BjjApp - Production.pubxml" />
     <None Include="Properties\PublishProfiles\K2BjjApp - Staging.pubxml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
