@@ -71,6 +71,7 @@ namespace K2Calendar.Controllers
                 MembershipUser currentUser = Membership.GetUser(resetPasswordModel.Username);
                 if (currentUser != null)
                 {
+                    currentUser.UnlockUser();
                     string newPassword = currentUser.ResetPassword();
                     SendPasswordResetEmail(currentUser.Email, newPassword);
                     TempData["isSuccessReset"] = true;
