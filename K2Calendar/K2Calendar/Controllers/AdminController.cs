@@ -20,7 +20,7 @@ namespace K2Calendar.Controllers
             //return View();
         //}
 
-        // GET: /Admin/Users/50
+        // GET: /Admin/Users/5
         //TODO: sort by parameter ascending and descending, search for user
         public ActionResult Users(int pageNumber = 1)
         {

@@ -6,6 +6,14 @@
 
 <div class="container">
     <div class="row"><div class="span5 offset3 containerBackground">
+    <!--TODO: refactor success/error alerts-->
+    @if (TempData["isSuccessReset"] != null)
+    {
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <strong>Password reset successful!</strong> Please check your email inbox (and spam) to retrieve your new password.
+        </div>
+    }
     <h2>Log In</h2>
     <p>
         Please enter your user name and password. 
@@ -30,8 +38,9 @@
         <br /><br />
         <small>
             <strong>
+                Click <a href="@Url.Action("ResetPassword")">here</a> if you have forgotten your password.<br />
                 *If you do not have an account please contact a K2 instructor.
-            </strong>
+             </strong>
         </small>
     }
     </div></div>

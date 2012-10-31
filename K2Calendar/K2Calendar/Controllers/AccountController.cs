@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using K2Calendar.Models;
+using K2Calendar.Utils;
 
 namespace K2Calendar.Controllers
 {
@@ -54,6 +55,35 @@ namespace K2Calendar.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        // GET: /Account/ResetPassword
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordModel resetPasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                //TODO: userId ignored as we only allow users to reset their own passwords
+                MembershipUser currentUser = Membership.GetUser(resetPasswordModel.Username);
+                if (currentUser != null)
+                {
+                    string newPassword = currentUser.ResetPassword();
+                    SendPasswordResetEmail(currentUser.Email, newPassword);
+                    TempData["isSuccessReset"] = true;
+                    return RedirectToAction("Logon");
+                }
+                else
+                {
+                    ModelState.AddModelError("Username", "Username not found.");
+                }
+            }
+            return View(resetPasswordModel);
+        }
+
         // GET: /Account/Register
         [Authorize(Roles="Administrator,SuperAdmin")]
         public ActionResult Register()
@@ -86,7 +116,8 @@ namespace K2Calendar.Controllers
                         userInfoModel.RankId = dbContext.Ranks.Where(r => r.IsActive == true).Min(r => r.Level);
                         dbContext.Users.Add(userInfoModel);
                         dbContext.SaveChanges();
-                       Roles.AddUserToRole(model.UserName, "User");
+                        Roles.AddUserToRole(model.UserName, "User");
+                        //TODO: send registration confirmation email
                     }
                     catch (Exception ex)
                     {
@@ -205,8 +236,11 @@ namespace K2Calendar.Controllers
                     Roles.AddUserToRole(membershipUserToUpdate.UserName, model.Role);
                     if (model.UserInfoModel.IsActive == false)
                     {
-                        membershipUserToUpdate.ResetPassword();
-                        //TODO: when a user is re-enabled (temp ban?), how do we get them their new pass?
+                        DisableUser(membershipUserToUpdate);
+                    }
+                    else
+                    {
+                        EnableUser(membershipUserToUpdate);
                     }
                     dbContext.Entry(userToUpdate).CurrentValues.SetValues(model.UserInfoModel);
                     dbContext.SaveChanges();
@@ -222,7 +256,7 @@ namespace K2Calendar.Controllers
             GenerateRoleList();
             return View(model);
         }
-        
+
         // GET: /Account/ChangePassword
         [Authorize]
         public ActionResult ChangePassword()
@@ -271,7 +305,8 @@ namespace K2Calendar.Controllers
             return View();
         }
         
-
+     
+        
         //Account helper methods
 
         public static UserInfoModel GetUserInfoFromMembershipUser(MembershipUser user, AppDbContext dbContext)
@@ -290,10 +325,36 @@ namespace K2Calendar.Controllers
             viewBag.RankList = new SelectList(ranksQuery, "Id", "Name", selectedRankId);
         }
 
+
         private void GenerateRoleList(object selectedRoleName = null)
         {
             string[] roleNames = Roles.GetAllRoles();
             ViewBag.RoleList = new SelectList(roleNames, selectedRoleName);
+        }
+
+        private static void SendPasswordResetEmail(string emailAddress, string newPassword)
+        {
+            var from = "DoNotReply@ottawamartialarts.com";
+            var to = emailAddress;
+            var subject = "K2BJJ Portal Password Reset!";
+            var html = string.Format(@"<p>Your new K2BJJ Portal Password is <strong>{0}</strong></p>
+                                        <p>Please login to http://www.k2bjj.azurewebsites.com and change your password as soon as possible.", newPassword);
+            Emailer emailer = new Emailer();
+            emailer.SendEmail(from, new[] { to }, subject, html);
+        }
+
+        private static void EnableUser(MembershipUser membershipUserToUpdate)
+        {
+            membershipUserToUpdate.UnlockUser();
+            membershipUserToUpdate.IsApproved = true;
+            Membership.UpdateUser(membershipUserToUpdate);
+        }
+
+        private static void DisableUser(MembershipUser membershipUserToUpdate)
+        {
+            membershipUserToUpdate.ResetPassword();
+            membershipUserToUpdate.IsApproved = false;
+            Membership.UpdateUser(membershipUserToUpdate);
         }
 
         #region Status Codes

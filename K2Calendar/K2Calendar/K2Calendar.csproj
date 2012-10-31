@@ -85,6 +85,9 @@
     <Reference Include="Microsoft.WindowsAzure.StorageClient, Version=1.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.1.7.0.0\lib\net35-full\Microsoft.WindowsAzure.StorageClient.dll</HintPath>
     </Reference>
+    <Reference Include="SendGridMail">
+      <HintPath>..\packages\Sendgrid.1.0.1\lib\net40\SendGridMail.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Runtime.Serialization" />
@@ -127,6 +130,7 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Emailer.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -157,6 +161,7 @@
     <Content Include="Content\token-input-facebook.css" />
     <Content Include="Content\token-input-mac.css" />
     <Content Include="Content\token-input.css" />
+    <Content Include="lib\CodeScales.Http.dll" />
     <Content Include="Scripts\jquery-1.8.1.js" />
     <Content Include="Scripts\jquery-1.8.1.min.js" />
   </ItemGroup>
@@ -265,6 +270,7 @@
     <None Include="Properties\PublishProfiles\k2bjj - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\K2BjjApp - Production.pubxml" />
     <None Include="Properties\PublishProfiles\K2BjjApp - Staging.pubxml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

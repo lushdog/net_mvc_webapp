@@ -24,6 +24,14 @@ namespace K2Calendar.Models
         public string ConfirmPassword { get; set; }
     }
 
+    public class ResetPasswordModel
+    {
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        [Display(Name = "Username for your account")]
+        public string Username { get; set; }
+    }
+
     public class LogOnModel
     {
         [Required]

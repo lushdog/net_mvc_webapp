@@ -14,11 +14,12 @@ namespace K2Calendar.Controllers
     public class PostController : Controller
     {
         private AppDbContext dbContext = new AppDbContext();
-        private const int PAGE_SIZE = 15;
+        private const int PAGE_SIZE = 5;
         private const int DESCRIPTION_SUMMARY_LENGTH = 400;
         
         // GET: /Post/
         //TODO: list posts like we do users
+        [Authorize]
         public ViewResult Index(int pageNumber = 1)
         {
             ViewBag.NumPages = Math.Ceiling((double)dbContext.Posts.Count() / PAGE_SIZE);
