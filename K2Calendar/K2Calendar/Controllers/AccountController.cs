@@ -335,7 +335,7 @@ namespace K2Calendar.Controllers
 
         private static void SendPasswordResetEmail(string emailAddress, string newPassword)
         {
-            var from = "DoNotReply@ottawamartialarts.com";
+            var from = "DoNotReply@K2BJJPortal.com";
             var to = emailAddress;
             var subject = "K2BJJ Portal Password Reset!";
             var html = string.Format(@"<p>Your new K2BJJ Portal Password is <strong>{0}</strong></p>

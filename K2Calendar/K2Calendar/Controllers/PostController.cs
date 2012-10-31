@@ -22,7 +22,7 @@ namespace K2Calendar.Controllers
         [Authorize]
         public ViewResult Index(int pageNumber = 1)
         {
-            ViewBag.NumPages = Math.Ceiling((double)dbContext.Posts.Count() / PAGE_SIZE);
+            ViewBag.NumPages = Math.Ceiling((double)dbContext.Posts.Where(p => p.IsActive == true).Count() / PAGE_SIZE);
             ViewBag.PageNum = pageNumber;
             var posts = dbContext.Posts.Include(p => p.Rank).Include(p => p.PostedBy).Where(p => p.IsActive == true).OrderByDescending(p => p.Id).Skip((pageNumber - 1) * PAGE_SIZE).Take(PAGE_SIZE);
             foreach (PostModel post in posts)
