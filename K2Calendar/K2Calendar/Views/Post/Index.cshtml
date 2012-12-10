@@ -16,7 +16,7 @@
         if (stats != undefined)  {                       //seems that stats can be null if disabled?
             numViews = data.entry.yt$statistics.viewCount;
         }
-        $("#" + youtubeId + " .thumb").html("<img class='img-rounded' src='" + youtubeThumb.url + "' width='" + youtubeThumb.width + "' height='" + youtubeThumb.height + "' alt='"+ youtubeThumb.yt$name + "' />");
+        $("#" + youtubeId + " .thumb").html("<img class='img-rounded' src='" + youtubeThumb.url.replace('http:', 'https:') + "' width='" + youtubeThumb.width + "' height='" + youtubeThumb.height + "' alt='"+ youtubeThumb.yt$name + "' />");
         $("#" + youtubeId + " .views").html('<small>' + numViews + ' views</small>');
        
         /*
@@ -69,7 +69,7 @@
                                 <small>Posted by @post.PostedBy.FirstName @post.PostedBy.LastName and taught on @post.EventDate.ToLocalTime().ToShortDateString()
                                 </small>
                             </p>
-                            <script type="text/javascript" src="http://gdata.youtube.com/feeds/api/videos/@post.YoutubeId?v=2&amp;alt=json-in-script&callback=youtubeCallback" >
+                            <script type="text/javascript" src="https://gdata.youtube.com/feeds/api/videos/@post.YoutubeId?v=2&amp;alt=json-in-script&callback=youtubeCallback" >
                             </script>
                         </div>
                     </div>

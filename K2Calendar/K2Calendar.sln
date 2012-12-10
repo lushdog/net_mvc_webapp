@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Web Developer Express 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 2012 for Web
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "K2Calendar", "K2Calendar\K2Calendar.csproj", "{F0E8FA2F-1B3F-401A-B588-8EAE3FADE16F}"
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "K2Calendar.Azure1", "K2Calendar.Azure1\K2Calendar.Azure1.ccproj", "{0C7BBB5F-BFB1-4DC0-911F-54709F6BAB51}"

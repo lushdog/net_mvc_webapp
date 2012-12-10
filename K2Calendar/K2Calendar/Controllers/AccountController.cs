@@ -12,6 +12,10 @@ namespace K2Calendar.Controllers
         AppDbContext dbContext = new AppDbContext();
 
         // GET: /Account/LogOn
+        #if DEBUG
+        #else
+        [RequireHttps] 
+        #endif
         public ActionResult LogOn()
         {
             return View();
@@ -19,7 +23,10 @@ namespace K2Calendar.Controllers
 
         // POST: /Account/LogOn
         [HttpPost]
-        //[RequireHttps] TODO:once we have domain get Cert http://msdn.microsoft.com/en-us/library/windowsazure/ff795779.aspx
+        #if DEBUG
+        #else
+        [RequireHttps] //TODO:once we have domain get Cert http://msdn.microsoft.com/en-us/library/windowsazure/ff795779.aspx
+        #endif
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
             if (ModelState.IsValid)
